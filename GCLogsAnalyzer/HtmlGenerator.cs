@@ -18,11 +18,11 @@ namespace GCLogsAnalyzer
             }
 
             public string Headline { get; }
+
             public string Content { get; }
         }
-        private Dictionary<string, Section> _sections = new Dictionary<string, Section>();
 
-        class TableColumn
+        private class TableColumn
         {
             public TableColumn(string headerText, Func<int, GeocacheLog, object> valueFunc)
             {
@@ -31,8 +31,11 @@ namespace GCLogsAnalyzer
             }
 
             public string HeaderText { get; }
+
             public Func<int,GeocacheLog,object> ValueFunc { get; }
         }
+
+        private Dictionary<string, Section> _sections = new Dictionary<string, Section>();
 
         private readonly TableColumn[] _fullInfoTableSpec = 
         {
@@ -58,6 +61,7 @@ namespace GCLogsAnalyzer
 
             if (_sections.Count > 0)
             {
+                // Table of Contents
                 buffer.AppendLine(HtmlHelper.Headline("toc", "Contents"));
                 buffer.AppendLine("<ul>");
                 foreach (var section in _sections)
@@ -66,6 +70,7 @@ namespace GCLogsAnalyzer
                 }
                 buffer.AppendLine("</ul>");
 
+                // All previously generated sections
                 foreach (var section in _sections)
                 {
                     buffer.AppendLine(section.Value.Content);
@@ -95,10 +100,5 @@ namespace GCLogsAnalyzer
 
             _sections.Add(name, new Section(headline, buffer.ToString()));
         }
-
-        //public string GetSection(string name)
-        //{
-        //    return _sections.TryGetValue(name, out var value) ? value : string.Empty;
-        //}
     }
 }

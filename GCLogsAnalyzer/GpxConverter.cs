@@ -58,61 +58,59 @@ namespace GCLogsAnalyzer
             {
                 if (reader.Name == "wpt")
                     break;
-                if (reader.NodeType == XmlNodeType.Element)
+                if (reader.NodeType != XmlNodeType.Element)
+                    continue;
+                switch (reader.Name)
                 {
-                    switch (reader.Name)
-                    {
-                        case "groundspeak:logs": ReadFoundLogEntry(reader, log); break;
-                        case "time": log.Placed = GetElementAsDateTime(reader); break;
-                        case "name": log.Code = GetElementAsString(reader); break;
-                        case "url": log.Url = GetElementAsString(reader); break;
-                        case "groundspeak:name": log.Name = GetElementAsString(reader); break;
-                        case "groundspeak:long_description": log.Description = GetElementAsString(reader); break;
-                        case "groundspeak:type": log.Type = GetElementAsString(reader); break;
-                        case "groundspeak:container": log.Size = GetElementAsString(reader); break;
-                        case "groundspeak:country": log.Country = GetElementAsString(reader); break;
-                        case "groundspeak:placed_by": log.PlacedBy = GetElementAsString(reader); break;
-                        case "groundspeak:difficulty": log.Difficulty = GetElementAsDouble(reader); break;
-                        case "groundspeak:terrain": log.Terrain = GetElementAsDouble(reader); break;
-                    }
+                    case "groundspeak:logs": ReadLogEntrySection(reader, log); break;
+                    case "time": log.Placed = GetElementAsDateTime(reader); break;
+                    case "name": log.Code = GetElementAsString(reader); break;
+                    case "url": log.Url = GetElementAsString(reader); break;
+                    case "groundspeak:name": log.Name = GetElementAsString(reader); break;
+                    case "groundspeak:long_description": log.Description = GetElementAsString(reader); break;
+                    case "groundspeak:type": log.Type = GetElementAsString(reader); break;
+                    case "groundspeak:container": log.Size = GetElementAsString(reader); break;
+                    case "groundspeak:country": log.Country = GetElementAsString(reader); break;
+                    case "groundspeak:placed_by": log.PlacedBy = GetElementAsString(reader); break;
+                    case "groundspeak:difficulty": log.Difficulty = GetElementAsDouble(reader); break;
+                    case "groundspeak:terrain": log.Terrain = GetElementAsDouble(reader); break;
                 }
             }
 
             return log;
         }
 
-        private void ReadFoundLogEntry(XmlReader reader, GeocacheLog log)
+        private void ReadLogEntrySection(XmlReader reader, GeocacheLog log)
         {
             while (reader.Read())
             {
                 if (reader.Name == "groundspeak:logs")
                     break;
-                if (reader.NodeType == XmlNodeType.Element && reader.Name == "groundspeak:log")
-                {
-                    var foundDate = DateTime.MinValue;
-                    var foundLogMsg = "";
-                    var logType = "";
-                    while (reader.Read())
-                    {
-                        if (reader.Name == "groundspeak:log")
-                            break;
-                        if (reader.NodeType == XmlNodeType.Element)
-                        {
-                            switch (reader.Name)
-                            {
-                                case "groundspeak:date": foundDate = GetElementAsDateTime(reader); break;
-                                case "groundspeak:text": foundLogMsg = GetElementAsString(reader); break;
-                                case "groundspeak:type": logType = GetElementAsString(reader); break;
-                            }
-                        }
-                    }
+                if (reader.NodeType != XmlNodeType.Element || reader.Name != "groundspeak:log") 
+                    continue;
 
-                    if (IsValidLogType(logType))
+                var foundDate = DateTime.MinValue;
+                var foundLogMsg = "";
+                var logType = "";
+                while (reader.Read())
+                {
+                    if (reader.Name == "groundspeak:log")
+                        break;
+                    if (reader.NodeType != XmlNodeType.Element)
+                        continue;
+                    switch (reader.Name)
                     {
-                        log.FoundDate = foundDate;
-                        log.FoundLog = foundLogMsg;
-                        log.LogType = logType;
+                        case "groundspeak:date": foundDate = GetElementAsDateTime(reader); break;
+                        case "groundspeak:text": foundLogMsg = GetElementAsString(reader); break;
+                        case "groundspeak:type": logType = GetElementAsString(reader); break;
                     }
+                }
+
+                if (IsValidLogType(logType))
+                {
+                    log.FoundDate = foundDate;
+                    log.FoundLog = foundLogMsg;
+                    log.LogType = logType;
                 }
             }
         }
