@@ -29,7 +29,7 @@ namespace GCLogsAnalyzer
             return buffer.ToString();
         }
 
-        public static string Headline(string name, string text) => $"<h1 id=\"{name}\">{text}</h1>";
+        public static string Headline(string name, string text, int level = 2) => $"<h{level} id=\"{name}\">{text}</h{level}>";
 
         /* Fixed Table-Header:
          https://css-tricks.com/position-sticky-and-table-headers/

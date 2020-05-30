@@ -2,7 +2,7 @@
   "profiles": {
     "GCLogsAnalyzer": {
       "commandName": "Project",
-      "commandLineArgs": "C:\\src\\GCLogsAnalyzer\\2349823.gpx C:\\src\\GCLogsAnalyzer\\2349823.gpx.html"
+      "commandLineArgs": "C:\\Temp\\gc\\2349823.gpx C:\\Temp\\gc\\2349823.gpx.html"
     }
   }
 }

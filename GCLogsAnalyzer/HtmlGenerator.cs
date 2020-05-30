@@ -22,37 +22,7 @@ namespace GCLogsAnalyzer
             public string Content { get; }
         }
 
-        private class TableColumn
-        {
-            public TableColumn(string headerText, Func<int, GeocacheLog, object> valueFunc)
-            {
-                HeaderText = headerText;
-                ValueFunc = valueFunc;
-            }
-
-            public string HeaderText { get; }
-
-            public Func<int,GeocacheLog,object> ValueFunc { get; }
-        }
-
         private Dictionary<string, Section> _sections = new Dictionary<string, Section>();
-
-        private readonly TableColumn[] _fullInfoTableSpec = 
-        {
-            new TableColumn ("Nr.",        (idx, log) => idx),
-            new TableColumn ("Found",      (idx, log) => log.FoundDate),
-            new TableColumn ("GC-Code",    (idx, log) => log.Code.ToLink(log.Url)),
-            new TableColumn ("Name",       (idx, log) => log.Name),
-            new TableColumn ("Type",       (idx, log) => log.Type),
-            new TableColumn ("Size",       (idx, log) => log.Size),
-            new TableColumn ("Difficulty", (idx, log) => log.Difficulty),
-            new TableColumn ("Terrain",    (idx, log) => log.Terrain),
-            new TableColumn ("Country",    (idx, log) => log.Country),
-            new TableColumn ("Placed",     (idx, log) => log.Placed),
-            new TableColumn ("PlacedBy",   (idx, log) => log.PlacedBy),
-            new TableColumn ("Coords",     (idx, log) => log.GeoLocation.ToGoogleMapsLink()),
-            new TableColumn ("LogType",    (idx, log) => log.LogType)
-        };
 
         public void GenerateHtmlFile(string filename)
         {
@@ -61,6 +31,7 @@ namespace GCLogsAnalyzer
 
             if (_sections.Count > 0)
             {
+                buffer.AppendLine(HtmlHelper.Headline("main", "Geocaching Found Statistics", 1));
                 // Table of Contents
                 buffer.AppendLine(HtmlHelper.Headline("toc", "Contents"));
                 buffer.AppendLine("<ul>");
@@ -82,17 +53,16 @@ namespace GCLogsAnalyzer
             File.WriteAllText(filename, buffer.ToString());
         }
 
-        public void AddTableSection(IEnumerable<GeocacheLog> founds, string headline, string name)
+        public void AddTableSection<T>(IEnumerable<T> data, string headline, string name, TableColumn<T>[] tableSpec)
         {
-            
             var buffer = new StringBuilder();
             buffer.AppendLine(HtmlHelper.Headline(name, headline));
-            var headerRow = HtmlHelper.TableRowHeader(_fullInfoTableSpec.Select(t => t.HeaderText).ToArray());
+            var headerRow = HtmlHelper.TableRowHeader(tableSpec.Select(t => t.HeaderText).ToArray());
             buffer.AppendLine(HtmlHelper.TableHeader(name, headerRow));
             var idx = 1;
-            foreach (var found in founds)
+            foreach (var item in data)
             {
-                buffer.AppendLine(HtmlHelper.TableRow(_fullInfoTableSpec.Select(t => t.ValueFunc(idx, found)).ToArray()));
+                buffer.AppendLine(HtmlHelper.TableRow(tableSpec.Select(t => t.ValueFunc(idx, item)).ToArray()));
                 idx++;
             }
 

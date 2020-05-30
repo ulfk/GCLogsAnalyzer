@@ -5,6 +5,8 @@ namespace GCLogsAnalyzer
 {
     public class GeocacheLog
     {
+        public int FoundIndex { get; set; }
+
         /// <summary>
         /// Geoache Placed Date
         /// </summary>

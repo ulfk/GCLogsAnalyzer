@@ -40,6 +40,10 @@ namespace GCLogsAnalyzer
                 }
             }
 
+            var idx = 1;
+            foreach (var log in FoundLogs.OrderBy(f => f.FoundDate))
+                log.FoundIndex = idx++;
+
             return this;
         }
 
