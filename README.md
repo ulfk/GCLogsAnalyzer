@@ -15,12 +15,12 @@ Currently these statistics are printed to HTML:
 
 Output details:
 - The GC-code is generated as link to the cache page.
-- The coordinates are generated as Google Maps link to easyly go to that coordinates.
+- The coordinates are generated as Google Maps link to easily map these coordinates.
 - The Owners are generated with a link to the profile-page.
 - The HTML page has a table of contents with link to the sections and each section has a link to jump back to the top.
 
 # ToDo
 
-- Generate HTML without html/head/body to be able to be able to easyly include it in an existing HTML page
+- Generate HTML without html/head/body to be able to easily include it in an existing HTML page
 - Improove the styling of the output
 - Add some more statistics (farest North/South/East/West, ...)
