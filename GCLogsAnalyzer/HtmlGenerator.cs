@@ -57,6 +57,7 @@ namespace GCLogsAnalyzer
         {
             var buffer = new StringBuilder();
             buffer.AppendLine(HtmlHelper.Headline(name, headline));
+            buffer.AppendLine(BackLink);
             var headerRow = HtmlHelper.TableRowHeader(tableSpec.Select(t => t.HeaderText).ToArray());
             buffer.AppendLine(HtmlHelper.TableHeader(name, headerRow));
             var idx = 1;
@@ -70,5 +71,7 @@ namespace GCLogsAnalyzer
 
             _sections.Add(name, new Section(headline, buffer.ToString()));
         }
+
+        private static string BackLink => $"<div class=\"backlink\">{("&uarr; back".ToLink("#main", false))}</div>";
     }
 }

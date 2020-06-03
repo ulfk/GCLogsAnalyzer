@@ -75,7 +75,11 @@ namespace GCLogsAnalyzer
                     case "groundspeak:type": log.Type = GetElementAsString(reader); break;
                     case "groundspeak:container": log.Size = GetElementAsString(reader); break;
                     case "groundspeak:country": log.Country = GetElementAsString(reader); break;
-                    case "groundspeak:placed_by": log.PlacedBy = GetElementAsString(reader); break;
+                    case "groundspeak:state": log.State = GetElementAsString(reader); break;
+                    case "groundspeak:owner":
+                        if (reader.HasAttributes) log.OwnerId = GetAttributeAsString(reader, "id");
+                        log.PlacedBy = GetElementAsString(reader); 
+                        break;
                     case "groundspeak:difficulty": log.Difficulty = GetElementAsDouble(reader); break;
                     case "groundspeak:terrain": log.Terrain = GetElementAsDouble(reader); break;
                 }
@@ -123,6 +127,8 @@ namespace GCLogsAnalyzer
             logType == "Found it" || logType == "Webcam Photo Taken" || logType == "Attended";
 
         private double GetAttributeAsDouble(XmlReader reader, string name) => ToDouble(reader.GetAttribute(name));
+
+        private string GetAttributeAsString(XmlReader reader, string name) => reader.GetAttribute(name);
 
         private string GetElementAsString(XmlReader reader) => reader.ReadElementContentAsString();
 

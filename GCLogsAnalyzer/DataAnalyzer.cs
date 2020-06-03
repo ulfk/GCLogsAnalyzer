@@ -20,7 +20,7 @@ namespace GCLogsAnalyzer
             new TableColumn<GeocacheLog> ("Terrain",    (idx, log) => log.Terrain),
             new TableColumn<GeocacheLog> ("Country",    (idx, log) => log.Country),
             new TableColumn<GeocacheLog> ("Placed",     (idx, log) => log.Placed),
-            new TableColumn<GeocacheLog> ("PlacedBy",   (idx, log) => log.PlacedBy),
+            new TableColumn<GeocacheLog> ("PlacedBy",   (idx, log) => log.PlacedBy.ToLink($"https://www.geocaching.com/p/default.aspx?id={log.OwnerId}")),
             new TableColumn<GeocacheLog> ("Coords",     (idx, log) => log.GeoLocation.ToGoogleMapsLink()),
             new TableColumn<GeocacheLog> ("LogType",    (idx, log) => log.LogType)
         };
@@ -37,7 +37,7 @@ namespace GCLogsAnalyzer
             new TableColumn<GeocacheLog> ("Terrain",    (idx, log) => log.Terrain),
             new TableColumn<GeocacheLog> ("Country",    (idx, log) => log.Country),
             new TableColumn<GeocacheLog> ("Placed",     (idx, log) => log.Placed),
-            new TableColumn<GeocacheLog> ("PlacedBy",   (idx, log) => log.PlacedBy),
+            new TableColumn<GeocacheLog> ("PlacedBy",   (idx, log) => log.PlacedBy.ToLink($"https://www.geocaching.com/p/default.aspx?id={log.OwnerId}")),
             new TableColumn<GeocacheLog> ("Coords",     (idx, log) => log.GeoLocation.ToGoogleMapsLink()),
             new TableColumn<GeocacheLog> ("LogType",    (idx, log) => log.LogType)
         };
@@ -46,7 +46,8 @@ namespace GCLogsAnalyzer
         {
             return new TableColumn<SimpleStat>[]
             {
-                    new TableColumn<SimpleStat>(text, (idx, stat) => stat.Text),
+                new TableColumn<SimpleStat>("Nr",     (idx, stat) => idx),
+                new TableColumn<SimpleStat>(text,     (idx, stat) => stat.Text),
                 new TableColumn<SimpleStat>("Founds", (idx, stat) => stat.Founds)
             };
         }
@@ -60,13 +61,13 @@ namespace GCLogsAnalyzer
                 .OrderByDescending(s => s.Founds);
             htmlGenerator.AddTableSection(countryStats, "Founds by Country", "FoundsByCountry", GetSimpleStatSpec("Country"));
 
-            // Founds by Owner
-            var ownerStats = foundLogs
-                .GroupBy(l => l.PlacedBy)
+            // Founds by State
+            var stateStats = foundLogs
+                .Where(l => l.Country == "Germany")
+                .GroupBy(l => l.State)
                 .Select(x => new SimpleStat(x.Key, x.Count()))
-                .Where(x => x.Founds >= 5)
                 .OrderByDescending(s => s.Founds);
-            htmlGenerator.AddTableSection(ownerStats, "Founds by Owner (five and more founds)", "FoundsByOwner", GetSimpleStatSpec("Owner"));
+            htmlGenerator.AddTableSection(stateStats, "Founds by 'Bundesland'", "FoundsByBundesland", GetSimpleStatSpec("Bundesland"));
 
             // Founds by Cache Type
             var typeStats = foundLogs
@@ -87,7 +88,15 @@ namespace GCLogsAnalyzer
                 .OrderBy(f => f.FoundDate)
                 .Where((l, i) => i == 0 || (i + 1) % 100 == 0);
             htmlGenerator.AddTableSection(anniversaryList, "Every 100th Found", "Every100thFound", _shortInfoTableSpec);
-            
+
+            // Founds by Owner
+            var ownerStats = foundLogs
+                .GroupBy(l => l.PlacedBy)
+                .Select(x => new SimpleStat(x.Key, x.Count()))
+                .Where(x => x.Founds >= 5)
+                .OrderByDescending(s => s.Founds);
+            htmlGenerator.AddTableSection(ownerStats, "Founds by Owner (five and more founds)", "FoundsByOwner", GetSimpleStatSpec("Owner"));
+
             // Founds by Found Date
             htmlGenerator.AddTableSection(foundLogs.OrderBy(f => f.FoundDate), "Logs by Found Date", "ByFoundDate", _shortInfoTableSpec);
             

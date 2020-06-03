@@ -58,9 +58,19 @@ namespace GCLogsAnalyzer
         public string Country { get; set; }
 
         /// <summary>
+        /// State
+        /// </summary>
+        public string State { get; set; }
+
+        /// <summary>
         /// Placed by (PlacedBy)
         /// </summary>
         public string PlacedBy { get; set; }
+
+        /// <summary>
+        /// Id of Cache Owner
+        /// </summary>
+        public string OwnerId { get; set; }
 
         /// <summary>
         /// Description of the cache

@@ -63,6 +63,10 @@ th {
   top: 0;
   box-shadow: 0 2px 2px -1px rgba(0, 0, 0, 0.4);
 }
+div.backlink {
+  font-size: 80%;
+  margin-bottom: 10px;
+}
 </style>
 </head>
 <body>";
