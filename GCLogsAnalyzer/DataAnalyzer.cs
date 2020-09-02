@@ -1,17 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Text;
 
 namespace GCLogsAnalyzer
 {
     public static class DataAnalyzer
     {
-        private static readonly TableColumn<GeocacheLog>[] _fullInfoTableSpec =
+        private static readonly TableColumn<GeocacheLog>[] FullInfoTableSpec =
 {
             new TableColumn<GeocacheLog> ("Nr.",        (idx, log) => idx),
             new TableColumn<GeocacheLog> ("Found-Idx",  (idx, log) => log.FoundIndex),
             new TableColumn<GeocacheLog> ("Found",      (idx, log) => log.FoundDate),
+            new TableColumn<GeocacheLog> ("Placed",     (idx, log) => log.Placed),
             new TableColumn<GeocacheLog> ("GC-Code",    (idx, log) => log.Code.ToLink(log.Url)),
             new TableColumn<GeocacheLog> ("Name",       (idx, log) => log.Name),
             new TableColumn<GeocacheLog> ("Type",       (idx, log) => log.Type),
@@ -19,16 +18,16 @@ namespace GCLogsAnalyzer
             new TableColumn<GeocacheLog> ("Difficulty", (idx, log) => log.Difficulty),
             new TableColumn<GeocacheLog> ("Terrain",    (idx, log) => log.Terrain),
             new TableColumn<GeocacheLog> ("Country",    (idx, log) => log.Country),
-            new TableColumn<GeocacheLog> ("Placed",     (idx, log) => log.Placed),
-            new TableColumn<GeocacheLog> ("PlacedBy",   (idx, log) => log.PlacedBy.ToLink($"https://www.geocaching.com/p/default.aspx?id={log.OwnerId}")),
+            new TableColumn<GeocacheLog> ("PlacedBy",   (idx, log) => log.PlacedBy.ToGcUserLink(log.OwnerId)),
             new TableColumn<GeocacheLog> ("Coords",     (idx, log) => log.GeoLocation.ToGoogleMapsLink()),
             new TableColumn<GeocacheLog> ("LogType",    (idx, log) => log.LogType)
         };
 
-        private static readonly TableColumn<GeocacheLog>[] _shortInfoTableSpec =
+        private static readonly TableColumn<GeocacheLog>[] ShortInfoTableSpec =
         {
             new TableColumn<GeocacheLog> ("Found-Idx",  (idx, log) => log.FoundIndex),
             new TableColumn<GeocacheLog> ("Found",      (idx, log) => log.FoundDate),
+            new TableColumn<GeocacheLog> ("Placed",     (idx, log) => log.Placed),
             new TableColumn<GeocacheLog> ("GC-Code",    (idx, log) => log.Code.ToLink(log.Url)),
             new TableColumn<GeocacheLog> ("Name",       (idx, log) => log.Name),
             new TableColumn<GeocacheLog> ("Type",       (idx, log) => log.Type),
@@ -36,15 +35,14 @@ namespace GCLogsAnalyzer
             new TableColumn<GeocacheLog> ("Difficulty", (idx, log) => log.Difficulty),
             new TableColumn<GeocacheLog> ("Terrain",    (idx, log) => log.Terrain),
             new TableColumn<GeocacheLog> ("Country",    (idx, log) => log.Country),
-            new TableColumn<GeocacheLog> ("Placed",     (idx, log) => log.Placed),
-            new TableColumn<GeocacheLog> ("PlacedBy",   (idx, log) => log.PlacedBy.ToLink($"https://www.geocaching.com/p/default.aspx?id={log.OwnerId}")),
+            new TableColumn<GeocacheLog> ("PlacedBy",   (idx, log) => log.PlacedBy.ToGcUserLink(log.OwnerId)),
             new TableColumn<GeocacheLog> ("Coords",     (idx, log) => log.GeoLocation.ToGoogleMapsLink()),
             new TableColumn<GeocacheLog> ("LogType",    (idx, log) => log.LogType)
         };
 
         private static TableColumn<SimpleStat>[] GetSimpleStatSpec(string text)
         {
-            return new TableColumn<SimpleStat>[]
+            return new []
             {
                 new TableColumn<SimpleStat>("Nr",     (idx, stat) => idx),
                 new TableColumn<SimpleStat>(text,     (idx, stat) => stat.Text),
@@ -87,7 +85,7 @@ namespace GCLogsAnalyzer
             var anniversaryList = foundLogs
                 .OrderBy(f => f.FoundDate)
                 .Where((l, i) => i == 0 || (i + 1) % 100 == 0);
-            htmlGenerator.AddTableSection(anniversaryList, "Every 100th Found", "Every100thFound", _shortInfoTableSpec);
+            htmlGenerator.AddTableSection(anniversaryList, "Every 100th Found", "Every100thFound", ShortInfoTableSpec);
 
             // Founds by Owner
             var ownerStats = foundLogs
@@ -98,10 +96,10 @@ namespace GCLogsAnalyzer
             htmlGenerator.AddTableSection(ownerStats, "Founds by Owner (five and more founds)", "FoundsByOwner", GetSimpleStatSpec("Owner"));
 
             // Founds by Found Date
-            htmlGenerator.AddTableSection(foundLogs.OrderBy(f => f.FoundDate), "Logs by Found Date", "ByFoundDate", _shortInfoTableSpec);
+            htmlGenerator.AddTableSection(foundLogs.OrderBy(f => f.FoundDate), "Logs by Found Date", "ByFoundDate", ShortInfoTableSpec);
             
             // Found by Placed Date
-            htmlGenerator.AddTableSection(foundLogs.OrderBy(f => f.Placed), "Logs by Placed Date", "ByPlacedDate", _fullInfoTableSpec);
+            htmlGenerator.AddTableSection(foundLogs.OrderBy(f => f.Placed), "Logs by Placed Date", "ByPlacedDate", FullInfoTableSpec);
         }
     }
 }

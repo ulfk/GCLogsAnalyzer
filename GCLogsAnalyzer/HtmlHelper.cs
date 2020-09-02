@@ -67,11 +67,17 @@ div.backlink {
   font-size: 80%;
   margin-bottom: 10px;
 }
+div.table {
+   display: inline-block;
+    overflow-y: auto;
+    max-height:500px;
+    border: 1px solid #ddd;
+}
 </style>
 </head>
 <body>";
 
-        public static string TableHeader(string sectionName, string headerRow) => $"<div id=\"{sectionName}\"><table><thead>{headerRow}</thead><tbody>";
+        public static string TableHeader(string sectionName, string headerRow) => $"<div id=\"{sectionName}\" class=\"table\"><table><thead>{headerRow}</thead><tbody>";
 
         public const string TableFooter = "</tbody></table></div>";
             
@@ -82,12 +88,17 @@ div.backlink {
             return $"<a href=\"{url}\" {(openInBlank ? "target=\"_blank\"" : "")}>{text}</a>";
         }
 
-        public static string ToGoogleMapsLink(this GeoLocation geoLocation)
+        public static string ToGcUserLink(this string text, string ownerId)
         {
-            return geoLocation.ToString().ToGoogleMapsLinks(geoLocation.LatString, geoLocation.LonString);
+            return text.ToLink($"https://www.geocaching.com/p/default.aspx?id={ownerId}");
         }
 
-        public static string ToGoogleMapsLinks(this string value, string lat, string lon)
+        public static string ToGoogleMapsLink(this GeoLocation geoLocation)
+        {
+            return geoLocation.ToString().ToGoogleMapsLink(geoLocation.LatString, geoLocation.LonString);
+        }
+
+        public static string ToGoogleMapsLink(this string value, string lat, string lon)
         {
             // https://stackoverflow.com/questions/1801732/how-do-i-link-to-google-maps-with-a-particular-longitude-and-latitude/52943975#52943975
 
