@@ -78,6 +78,11 @@ namespace GCLogsAnalyzer
         public string Description { get; set; }
 
         /// <summary>
+        /// ID of the log entry
+        /// </summary>
+        public string LogId { get; set; }
+
+        /// <summary>
         /// Date when user found the cache
         /// </summary>
         public DateTime FoundDate { get; set; }

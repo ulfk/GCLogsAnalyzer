@@ -20,7 +20,8 @@ namespace GCLogsAnalyzer
             new TableColumn<GeocacheLog> ("Country",    (idx, log) => log.Country),
             new TableColumn<GeocacheLog> ("PlacedBy",   (idx, log) => log.PlacedBy.ToGcUserLink(log.OwnerId)),
             new TableColumn<GeocacheLog> ("Coords",     (idx, log) => log.GeoLocation.ToGoogleMapsLink()),
-            new TableColumn<GeocacheLog> ("LogType",    (idx, log) => log.LogType)
+            new TableColumn<GeocacheLog> ("LogType",    (idx, log) => log.LogType),
+            new TableColumn<GeocacheLog> ("Visit Log",  (idx, log) => "Visit Log".ToLogLink(log.LogId))
         };
 
         private static readonly TableColumn<GeocacheLog>[] ShortInfoTableSpec =
@@ -37,7 +38,8 @@ namespace GCLogsAnalyzer
             new TableColumn<GeocacheLog> ("Country",    (idx, log) => log.Country),
             new TableColumn<GeocacheLog> ("PlacedBy",   (idx, log) => log.PlacedBy.ToGcUserLink(log.OwnerId)),
             new TableColumn<GeocacheLog> ("Coords",     (idx, log) => log.GeoLocation.ToGoogleMapsLink()),
-            new TableColumn<GeocacheLog> ("LogType",    (idx, log) => log.LogType)
+            new TableColumn<GeocacheLog> ("LogType",    (idx, log) => log.LogType),
+            new TableColumn<GeocacheLog> ("Visit Log",  (idx, log) => "Visit Log".ToLogLink(log.LogId))
         };
 
         private static TableColumn<SimpleStat>[] GetSimpleStatSpec(string text)

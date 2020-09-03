@@ -2,9 +2,9 @@
 
 namespace GCLogsAnalyzer
 {
-    class Program
+    public class Program
     {
-        static void Main(string[] args)
+        public static void Main(string[] args)
         {
             Console.WriteLine("=== GC Logs Analyzer ===");
             if (args.Length < 2)

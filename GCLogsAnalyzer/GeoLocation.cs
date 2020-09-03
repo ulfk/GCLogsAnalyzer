@@ -5,7 +5,7 @@ namespace GCLogsAnalyzer
 {
     public class GeoLocation
     {
-        // currently we don't need to set this from outside so leave it privates
+        // currently we don't need to set this from outside so leave it private
         private readonly CultureInfo _culture = new CultureInfo("en-US");
 
         public double Lat { get; set; }
@@ -18,13 +18,13 @@ namespace GCLogsAnalyzer
 
         public override string ToString()
         {
-            var lat = Math.Abs(Lat);
             var latChar = Lat >= 0.0 ? 'N' : 'S';
+            var lat = Math.Abs(Lat);
             var latInt = Math.Truncate(lat);
             var latDec = lat - latInt;
 
-            var lon = Math.Abs(Lon);
             var lonChar = Lon >= 0.0 ? 'E' : 'W';
+            var lon = Math.Abs(Lon);
             var lonInt = Math.Truncate(lon);
             var lonDec = lon - lonInt;
 

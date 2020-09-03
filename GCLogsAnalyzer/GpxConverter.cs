@@ -19,10 +19,8 @@ namespace GCLogsAnalyzer
         {
             _filename = filename;
             FoundLogs = new List<GeocacheLog>();
-            // used to convert float numbers that are currently stored in en-US style in the GPX
-            _cultureInfo = new CultureInfo("en-US");
-            // all timestamps in the GPX are currently in Pacific Standard Time
-            _timeZone = TimeZoneInfo.GetSystemTimeZones().First(tz => tz.Id == "Pacific Standard Time");
+            _cultureInfo = GroundspeakHelper.CultureInfo;
+            _timeZone = GroundspeakHelper.TimeZoneInfo;
         }
 
         public GpxConverter Parse()
@@ -97,6 +95,11 @@ namespace GCLogsAnalyzer
                 if (reader.NodeType != XmlNodeType.Element || reader.Name != "groundspeak:log") 
                     continue;
 
+                if (reader.HasAttributes)
+                {
+                    log.LogId = GetAttributeAsString(reader, "id");
+                }
+
                 var foundDate = DateTime.MinValue;
                 var foundLogMsg = "";
                 var logType = "";
@@ -114,7 +117,7 @@ namespace GCLogsAnalyzer
                     }
                 }
 
-                if (IsValidLogType(logType))
+                if (GroundspeakHelper.IsValidLogType(logType))
                 {
                     log.FoundDate = foundDate;
                     log.FoundLog = foundLogMsg;
@@ -122,9 +125,6 @@ namespace GCLogsAnalyzer
                 }
             }
         }
-
-        private bool IsValidLogType(string logType) =>
-            logType == "Found it" || logType == "Webcam Photo Taken" || logType == "Attended";
 
         private double GetAttributeAsDouble(XmlReader reader, string name) => ToDouble(reader.GetAttribute(name));
 

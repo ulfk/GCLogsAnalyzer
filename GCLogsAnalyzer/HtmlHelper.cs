@@ -88,9 +88,9 @@ div.table {
             return $"<a href=\"{url}\" {(openInBlank ? "target=\"_blank\"" : "")}>{text}</a>";
         }
 
-        public static string ToGcUserLink(this string text, string ownerId)
+        public static string ToGcUserLink(this string text, string userId)
         {
-            return text.ToLink($"https://www.geocaching.com/p/default.aspx?id={ownerId}");
+            return text.ToLink(GroundspeakHelper.GetUserUrl(userId));
         }
 
         public static string ToGoogleMapsLink(this GeoLocation geoLocation)
@@ -105,6 +105,11 @@ div.table {
             return value.ToLink($"https://www.google.com/maps/search/?api=1&query={lat},{lon}");
         }
 
+        public static string ToLogLink(this string value, string logId)
+        {
+            return value.ToLink(GroundspeakHelper.GetLogUrl(logId));
+        }
+        
         private static string ValueToString(object value)
         {
             switch (value)
