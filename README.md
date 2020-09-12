@@ -10,6 +10,7 @@ Currently these statistics are printed to HTML:
 - Founds by Container Size
 - Every 100th Found
 - Founds by Owner (five and more founds)
+- Cardinal Direction Maximums
 - Logs ordered by Found Date
 - Logs ordered by Placed Date
 
