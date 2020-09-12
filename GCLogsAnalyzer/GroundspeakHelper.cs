@@ -60,8 +60,11 @@ namespace GCLogsAnalyzer
             var logIdNumeric = int.Parse(logId);
             var logCode = CalcCodeFromId(logIdNumeric);
 
-            return $"https://coord.info/{logCode}";
+            return logCode.ToCoordInfoUrl();
         }
+
+
+        public static string ToCoordInfoUrl(this string tail) => $"https://coord.info/{tail}";
 
         public static string GetUserUrl(string user) => $"https://www.geocaching.com/p/default.aspx?id={user}";
 

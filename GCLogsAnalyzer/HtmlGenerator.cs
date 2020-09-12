@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Xml;
 
 namespace GCLogsAnalyzer
 {
@@ -24,10 +22,12 @@ namespace GCLogsAnalyzer
 
         private Dictionary<string, Section> _sections = new Dictionary<string, Section>();
 
-        public void GenerateHtmlFile(string filename)
+        public void GenerateHtmlFile(string filename, bool addHtmlHeader = true)
         {
             var buffer = new StringBuilder();
-            buffer.AppendLine(HtmlHelper.PageHeader);
+            if(addHtmlHeader) 
+                buffer.AppendLine(HtmlHelper.PageHeader);
+            buffer.AppendLine(HtmlHelper.StyleAndSectionHeader);
 
             if (_sections.Count > 0)
             {
@@ -48,7 +48,9 @@ namespace GCLogsAnalyzer
                 }
             }
 
-            buffer.AppendLine(HtmlHelper.PageFooter);
+            buffer.AppendLine(HtmlHelper.StyleAndSectionFooter);
+            if (addHtmlHeader)
+                buffer.AppendLine(HtmlHelper.PageFooter);
 
             File.WriteAllText(filename, buffer.ToString());
         }
@@ -58,7 +60,7 @@ namespace GCLogsAnalyzer
             var buffer = new StringBuilder();
             buffer.AppendLine(HtmlHelper.Headline(name, headline));
             buffer.AppendLine(BackLink);
-            var headerRow = HtmlHelper.TableRowHeader(tableSpec.Select(t => t.HeaderText).ToArray());
+            var headerRow = HtmlHelper.TableRowHeader(tableSpec.Select(t => t.HeaderText).ToArray<object>());
             buffer.AppendLine(HtmlHelper.TableHeader(name, headerRow));
             var idx = 1;
             foreach (var item in data)

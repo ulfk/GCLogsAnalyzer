@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text;
 
 namespace GCLogsAnalyzer
@@ -10,12 +11,12 @@ namespace GCLogsAnalyzer
             return Row(values, false);
         }
 
-        public static string TableRowHeader(params string[] values)
+        public static string TableRowHeader(params object[] values)
         {
             return Row(values, true);
         }
 
-        private static string Row(object[] values, bool isHeader)
+        private static string Row(IEnumerable<object> values, bool isHeader)
         {
             var buffer = new StringBuilder();
             buffer.Append("<tr>");
@@ -25,7 +26,7 @@ namespace GCLogsAnalyzer
                 buffer.Append($"<{cellTag}>{ValueToString(value)}</{cellTag}>");
             }
 
-            buffer.AppendLine("</tr>");
+            buffer.Append("</tr>");
             return buffer.ToString();
         }
 
@@ -39,8 +40,15 @@ namespace GCLogsAnalyzer
         public const string PageHeader = @"<html>
 <head>
 <title>Founds</title>
-<style>
-body {
+</head>
+<body>";
+
+        public const string PageFooter = "</body>\n</html>";
+
+        public const string StyleAndSectionHeader = @"
+<div id=""gc-logs-analyzed"">
+<style type=""text/css"" scoped>
+#gc-logs-analyzed {
     font-family: ""Arial"";
     padding: 10px;
 }
@@ -74,15 +82,14 @@ div.table {
     border: 1px solid #ddd;
 }
 </style>
-</head>
-<body>";
+";
 
-        public static string TableHeader(string sectionName, string headerRow) => $"<div id=\"{sectionName}\" class=\"table\"><table><thead>{headerRow}</thead><tbody>";
+        public const string StyleAndSectionFooter = "</div>";
 
-        public const string TableFooter = "</tbody></table></div>";
+        public static string TableHeader(string sectionName, string headerRow) => $"<div id=\"{sectionName}\" class=\"table\">\n<table><thead>{headerRow}</thead>\n<tbody>";
+
+        public const string TableFooter = "</tbody>\n</table>\n</div>";
             
-        public const string PageFooter = "</body>\n</html>";
-
         public static string ToLink(this string text, string url, bool openInBlank = true)
         {
             return $"<a href=\"{url}\" {(openInBlank ? "target=\"_blank\"" : "")}>{text}</a>";

@@ -23,6 +23,5 @@ Output details:
 
 # ToDo
 
-- Generate HTML without html/head/body to be able to easily include it in an existing HTML page
 - Improove the styling of the output
-- Add some more statistics (farest North/South/East/West, ...)
+- Add some more statistics
