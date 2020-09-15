@@ -20,7 +20,7 @@ namespace GCLogsAnalyzer
             public string Content { get; }
         }
 
-        private Dictionary<string, Section> _sections = new Dictionary<string, Section>();
+        private readonly Dictionary<string, Section> _sections = new Dictionary<string, Section>();
 
         public void GenerateHtmlFile(string filename, bool addHtmlHeader = true)
         {
@@ -35,9 +35,9 @@ namespace GCLogsAnalyzer
                 // Table of Contents
                 buffer.AppendLine(HtmlHelper.Headline("toc", "Contents"));
                 buffer.AppendLine("<ul>");
-                foreach (var section in _sections)
+                foreach (var (sectionLinkName, sectionData) in _sections)
                 {
-                    buffer.AppendLine($"<li>{section.Value.Headline.ToLink($"#{section.Key}", false)}</li>");
+                    buffer.AppendLine($"<li>{sectionData.Headline.ToLink($"#{sectionLinkName}", false)}</li>");
                 }
                 buffer.AppendLine("</ul>");
 

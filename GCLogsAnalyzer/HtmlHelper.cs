@@ -97,7 +97,7 @@ div.table {
 
         public static string ToGcUserLink(this string text, string userId)
         {
-            return text.ToLink(GroundspeakHelper.GetUserUrl(userId));
+            return text.ToLink(userId.GetUserUrl());
         }
 
         public static string ToGoogleMapsLink(this GeoLocation geoLocation)

@@ -117,7 +117,7 @@ namespace GCLogsAnalyzer
                     }
                 }
 
-                if (GroundspeakHelper.IsValidLogType(logType))
+                if (logType.IsValidLogType())
                 {
                     log.FoundDate = foundDate;
                     log.FoundLog = foundLogMsg;
@@ -128,9 +128,9 @@ namespace GCLogsAnalyzer
 
         private double GetAttributeAsDouble(XmlReader reader, string name) => ToDouble(reader.GetAttribute(name));
 
-        private string GetAttributeAsString(XmlReader reader, string name) => reader.GetAttribute(name);
+        private static string GetAttributeAsString(XmlReader reader, string name) => reader.GetAttribute(name);
 
-        private string GetElementAsString(XmlReader reader) => reader.ReadElementContentAsString();
+        private static string GetElementAsString(XmlReader reader) => reader.ReadElementContentAsString();
 
         private DateTime GetElementAsDateTime(XmlReader reader)
         {

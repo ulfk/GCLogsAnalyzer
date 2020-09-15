@@ -15,11 +15,6 @@ namespace GCLogsAnalyzer
 
         /// <summary>
         /// Calculation found here: http://kryptografie.de/kryptografie/chiffre/gc-code.htm
-        /// Test cases:
-        ///   "Petit":                    30236633 -> "125QG6"
-        ///   "Goeteborg Magnetic":       30142402 -> "122JEF"
-        ///   "Am Brombeerweg":          303712500 -> "AK9HRB"
-        ///   "Volksdorfer Wochenmarkt": 859171469 -> "Z0QQRK"
         /// </summary>
         /// <param name="logId"></param>
         /// <param name="prefix"></param>
@@ -38,6 +33,13 @@ namespace GCLogsAnalyzer
             return prefix + result;
         }
 
+        /// <summary>
+        /// Calculate ID from GC/GL-code
+        /// </summary>
+        /// <param name="code"></param>
+        /// <param name="prefixToRemove"></param>
+        /// <returns></returns>
+        // ReSharper disable once UnusedMember.Local
         private static int GetIdFromCode(string code, string prefixToRemove = null)
         {
             var factor = 1;
@@ -66,7 +68,7 @@ namespace GCLogsAnalyzer
 
         public static string ToCoordInfoUrl(this string tail) => $"https://coord.info/{tail}";
 
-        public static string GetUserUrl(string user) => $"https://www.geocaching.com/p/default.aspx?id={user}";
+        public static string GetUserUrl(this string user) => $"https://www.geocaching.com/p/default.aspx?id={user}";
 
         // used to convert float numbers that are currently stored in en-US style in the GPX
         public static CultureInfo CultureInfo => new CultureInfo("en-US");
@@ -74,6 +76,6 @@ namespace GCLogsAnalyzer
         // all timestamps in the GPX are currently in Pacific Standard Time
         public static TimeZoneInfo TimeZoneInfo => TimeZoneInfo.GetSystemTimeZones().First(tz => tz.Id == "Pacific Standard Time");
 
-        public static bool IsValidLogType(string logType) => logType == "Found it" || logType == "Webcam Photo Taken" || logType == "Attended";
+        public static bool IsValidLogType(this string logType) => logType == "Found it" || logType == "Webcam Photo Taken" || logType == "Attended";
     }
 }
