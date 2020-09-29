@@ -20,7 +20,7 @@ namespace GCLogsAnalyzer
             var converter = new GpxConverter(filename).Parse();
             Console.WriteLine($"{converter.FoundLogs.Count} logs read from file");
 
-            DataAnalyzer.Analyze(converter.FoundLogs, htmlGenerator);
+            DataAnalyzer.Analyze(converter.FoundLogs, htmlGenerator, Console.WriteLine);
             htmlGenerator.GenerateHtmlFile(htmlFile);
             Console.WriteLine($"HTML-Output written to '{htmlFile}'");
         }

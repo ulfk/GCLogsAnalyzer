@@ -25,61 +25,76 @@ namespace GCLogsAnalyzer
         private const string ColDescription = "Description";
         private const string TextVisitLog = "Visit Log";
 
+        private static TableColumn<GeocacheLog> CreateLogColumn(
+            string headerText,
+            Func<int, GeocacheLog, object> valueFunc)
+            => new TableColumn<GeocacheLog>(headerText, valueFunc);
+
+        private static TableColumn<SimpleLogStat> CreateLogStatColumn(
+            string headerText,
+            Func<int, SimpleLogStat, object> valueFunc)
+            => new TableColumn<SimpleLogStat>(headerText, valueFunc);
+
+        private static TableColumn<SimpleStat> CreateStatColumn(
+            string headerText,
+            Func<int, SimpleStat, object> valueFunc)
+            => new TableColumn<SimpleStat>(headerText, valueFunc);
+
         private static readonly TableColumn<GeocacheLog>[] FullInfoTableSpec =
         {
-            new TableColumn<GeocacheLog>(ColNr,        (idx, log) => idx),
-            new TableColumn<GeocacheLog>(ColFoundIdx,  (idx, log) => log.FoundIndex),
-            new TableColumn<GeocacheLog>(ColFound,     (idx, log) => log.FoundDate),
-            new TableColumn<GeocacheLog>(ColPlaced,    (idx, log) => log.Placed),
-            new TableColumn<GeocacheLog>(ColGcCode,    (idx, log) => log.Code.ToLink(log.Code.ToCoordInfoUrl())),
-            new TableColumn<GeocacheLog>(ColName,      (idx, log) => log.Name),
-            new TableColumn<GeocacheLog>(ColType,      (idx, log) => log.Type),
-            new TableColumn<GeocacheLog>(ColSize,      (idx, log) => log.Size),
-            new TableColumn<GeocacheLog>(ColDifficulty,(idx, log) => log.Difficulty),
-            new TableColumn<GeocacheLog>(ColTerrain,   (idx, log) => log.Terrain),
-            new TableColumn<GeocacheLog>(ColCountry,   (idx, log) => log.Country),
-            new TableColumn<GeocacheLog>(ColPlacedBy,  (idx, log) => log.PlacedBy.ToGcUserLink(log.OwnerId)),
-            new TableColumn<GeocacheLog>(ColCoords,    (idx, log) => log.GeoLocation.ToGoogleMapsLink()),
-            new TableColumn<GeocacheLog>(ColLogType,   (idx, log) => log.LogType),
-            new TableColumn<GeocacheLog>(ColLog,       (idx, log) => TextVisitLog.ToLogLink(log.LogId))
+            CreateLogColumn(ColNr,        (idx, log) => idx),
+            CreateLogColumn(ColFoundIdx,  (idx, log) => log.FoundIndex),
+            CreateLogColumn(ColFound,     (idx, log) => log.FoundDate),
+            CreateLogColumn(ColPlaced,    (idx, log) => log.Placed),
+            CreateLogColumn(ColGcCode,    (idx, log) => log.Code.ToLink(log.Code.ToCoordInfoUrl())),
+            CreateLogColumn(ColName,      (idx, log) => log.Name),
+            CreateLogColumn(ColType,      (idx, log) => log.Type),
+            CreateLogColumn(ColSize,      (idx, log) => log.Size),
+            CreateLogColumn(ColDifficulty,(idx, log) => log.Difficulty),
+            CreateLogColumn(ColTerrain,   (idx, log) => log.Terrain),
+            CreateLogColumn(ColCountry,   (idx, log) => log.Country),
+            CreateLogColumn(ColPlacedBy,  (idx, log) => log.PlacedBy.ToGcUserLink(log.OwnerId)),
+            CreateLogColumn(ColCoords,    (idx, log) => log.GeoLocation.ToGoogleMapsLink()),
+            CreateLogColumn(ColLogType,   (idx, log) => log.LogType),
+            CreateLogColumn(ColLog,       (idx, log) => TextVisitLog.ToLogLink(log.LogId))
         };
 
         private static readonly TableColumn<GeocacheLog>[] ShortInfoTableSpec =
         {
-            new TableColumn<GeocacheLog>(ColFoundIdx,  (idx, log) => log.FoundIndex),
-            new TableColumn<GeocacheLog>(ColFound,     (idx, log) => log.FoundDate),
-            new TableColumn<GeocacheLog>(ColPlaced,    (idx, log) => log.Placed),
-            new TableColumn<GeocacheLog>(ColGcCode,    (idx, log) => log.Code.ToLink(log.Code.ToCoordInfoUrl())),
-            new TableColumn<GeocacheLog>(ColName,      (idx, log) => log.Name),
-            new TableColumn<GeocacheLog>(ColType,      (idx, log) => log.Type),
-            new TableColumn<GeocacheLog>(ColSize,      (idx, log) => log.Size),
-            new TableColumn<GeocacheLog>(ColDifficulty,(idx, log) => log.Difficulty),
-            new TableColumn<GeocacheLog>(ColTerrain,   (idx, log) => log.Terrain),
-            new TableColumn<GeocacheLog>(ColCountry,   (idx, log) => log.Country),
-            new TableColumn<GeocacheLog>(ColPlacedBy,  (idx, log) => log.PlacedBy.ToGcUserLink(log.OwnerId)),
-            new TableColumn<GeocacheLog>(ColCoords,    (idx, log) => log.GeoLocation.ToGoogleMapsLink()),
-            new TableColumn<GeocacheLog>(ColLogType,   (idx, log) => log.LogType),
-            new TableColumn<GeocacheLog>(ColLog,       (idx, log) => TextVisitLog.ToLogLink(log.LogId))
+            CreateLogColumn(ColFoundIdx,  (idx, log) => log.FoundIndex),
+            CreateLogColumn(ColFound,     (idx, log) => log.FoundDate),
+            CreateLogColumn(ColPlaced,    (idx, log) => log.Placed),
+            CreateLogColumn(ColGcCode,    (idx, log) => log.Code.ToLink(log.Code.ToCoordInfoUrl())),
+            CreateLogColumn(ColName,      (idx, log) => log.Name),
+            CreateLogColumn(ColType,      (idx, log) => log.Type),
+            CreateLogColumn(ColSize,      (idx, log) => log.Size),
+            CreateLogColumn(ColDifficulty,(idx, log) => log.Difficulty),
+            CreateLogColumn(ColTerrain,   (idx, log) => log.Terrain),
+            CreateLogColumn(ColCountry,   (idx, log) => log.Country),
+            CreateLogColumn(ColPlacedBy,  (idx, log) => log.PlacedBy.ToGcUserLink(log.OwnerId)),
+            CreateLogColumn(ColCoords,    (idx, log) => log.GeoLocation.ToGoogleMapsLink()),
+            CreateLogColumn(ColLogType,   (idx, log) => log.LogType),
+            CreateLogColumn(ColLog,       (idx, log) => TextVisitLog.ToLogLink(log.LogId))
         };
 
         private static readonly TableColumn<SimpleLogStat>[] SimpleLogStatTableSpec =
         {
-            new TableColumn<SimpleLogStat>(ColDescription,(idx, stat) => stat.Text),
-            new TableColumn<SimpleLogStat>(ColGcCode,     (idx, stat) => stat.Log.Code.ToLink(stat.Log.Code.ToCoordInfoUrl())),
-            new TableColumn<SimpleLogStat>(ColFound,      (idx, stat) => stat.Log.FoundDate),
-            new TableColumn<SimpleLogStat>(ColName,       (idx, stat) => stat.Log.Name),
-            new TableColumn<SimpleLogStat>(ColType,       (idx, stat) => stat.Log.Type),
-            new TableColumn<SimpleLogStat>(ColCoords,     (idx, stat) => stat.Log.GeoLocation.ToGoogleMapsLink()),
-            new TableColumn<SimpleLogStat>(ColLog,        (idx, stat) => TextVisitLog.ToLogLink(stat.Log.LogId))
+            CreateLogStatColumn(ColDescription,(idx, stat) => stat.Text),
+            CreateLogStatColumn(ColGcCode,     (idx, stat) => stat.Log.Code.ToLink(stat.Log.Code.ToCoordInfoUrl())),
+            CreateLogStatColumn(ColFound,      (idx, stat) => stat.Log.FoundDate),
+            CreateLogStatColumn(ColName,       (idx, stat) => stat.Log.Name),
+            CreateLogStatColumn(ColType,       (idx, stat) => stat.Log.Type),
+            CreateLogStatColumn(ColCoords,     (idx, stat) => stat.Log.GeoLocation.ToGoogleMapsLink()),
+            CreateLogStatColumn(ColLog,        (idx, stat) => TextVisitLog.ToLogLink(stat.Log.LogId))
         };
 
         private static TableColumn<SimpleStat>[] GetSimpleStatSpec(string text)
         {
             return new[]
             {
-                new TableColumn<SimpleStat>(ColNr,     (idx, stat) => idx),
-                new TableColumn<SimpleStat>(text,      (idx, stat) => stat.Text),
-                new TableColumn<SimpleStat>(ColFounds, (idx, stat) => stat.Founds)
+                CreateStatColumn(ColNr,     (idx, stat) => idx),
+                CreateStatColumn(text,      (idx, stat) => stat.Text),
+                CreateStatColumn(ColFounds, (idx, stat) => stat.Founds)
             };
         }
 
@@ -99,10 +114,14 @@ namespace GCLogsAnalyzer
             FoundsByPlacedDate
         };
 
-        public static void Analyze(List<GeocacheLog> foundLogs, HtmlGenerator htmlGenerator)
+        public static void Analyze(List<GeocacheLog> foundLogs, HtmlGenerator htmlGenerator, Action<string> logMethod)
         {
+            if(htmlGenerator == null) throw new ArgumentNullException(nameof(htmlGenerator));
+            if(foundLogs == null) throw new ArgumentNullException(nameof(foundLogs));
+
             foreach (var analyzingMethod in AnalyzingMethods)
             {
+                logMethod?.Invoke($"Adding {analyzingMethod.Method.Name}");
                 analyzingMethod(foundLogs, htmlGenerator);
             }
         }
