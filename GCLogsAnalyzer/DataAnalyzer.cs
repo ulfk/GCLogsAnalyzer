@@ -6,64 +6,86 @@ namespace GCLogsAnalyzer
 {
     public static class DataAnalyzer
     {
+        private const string ColFoundIdx = "Found-Idx";
+        private const string ColNr = "Nr.";
+        private const string ColFound = "Found";
+        private const string ColFounds = "Founds";
+        private const string ColPlaced = "Placed";
+        private const string ColGcCode = "GC-Code";
+        private const string ColName = "Name";
+        private const string ColType = "Type";
+        private const string ColSize = "Size";
+        private const string ColDifficulty = "Difficulty";
+        private const string ColTerrain = "Terrain";
+        private const string ColCountry = "Country";
+        private const string ColPlacedBy = "Placed by";
+        private const string ColCoords = "Coords";
+        private const string ColLogType = "Log Type";
+        private const string ColLog = "Log";
+        private const string ColDescription = "Description";
+        private const string TextVisitLog = "Visit Log";
+
         private static readonly TableColumn<GeocacheLog>[] FullInfoTableSpec =
         {
-            new TableColumn<GeocacheLog>("Nr.",        (idx, log) => idx),
-            new TableColumn<GeocacheLog>("Found-Idx",  (idx, log) => log.FoundIndex),
-            new TableColumn<GeocacheLog>("Found",      (idx, log) => log.FoundDate),
-            new TableColumn<GeocacheLog>("Placed",     (idx, log) => log.Placed),
-            new TableColumn<GeocacheLog>("GC-Code",    (idx, log) => log.Code.ToLink(log.Code.ToCoordInfoUrl())),
-            new TableColumn<GeocacheLog>("Name",       (idx, log) => log.Name),
-            new TableColumn<GeocacheLog>("Type",       (idx, log) => log.Type),
-            new TableColumn<GeocacheLog>("Size",       (idx, log) => log.Size),
-            new TableColumn<GeocacheLog>("Difficulty", (idx, log) => log.Difficulty),
-            new TableColumn<GeocacheLog>("Terrain",    (idx, log) => log.Terrain),
-            new TableColumn<GeocacheLog>("Country",    (idx, log) => log.Country),
-            new TableColumn<GeocacheLog>("PlacedBy",   (idx, log) => log.PlacedBy.ToGcUserLink(log.OwnerId)),
-            new TableColumn<GeocacheLog>("Coords",     (idx, log) => log.GeoLocation.ToGoogleMapsLink()),
-            new TableColumn<GeocacheLog>("LogType",    (idx, log) => log.LogType),
-            new TableColumn<GeocacheLog>("Log",        (idx, log) => "Visit Log".ToLogLink(log.LogId))
+            new TableColumn<GeocacheLog>(ColNr,        (idx, log) => idx),
+            new TableColumn<GeocacheLog>(ColFoundIdx,  (idx, log) => log.FoundIndex),
+            new TableColumn<GeocacheLog>(ColFound,     (idx, log) => log.FoundDate),
+            new TableColumn<GeocacheLog>(ColPlaced,    (idx, log) => log.Placed),
+            new TableColumn<GeocacheLog>(ColGcCode,    (idx, log) => log.Code.ToLink(log.Code.ToCoordInfoUrl())),
+            new TableColumn<GeocacheLog>(ColName,      (idx, log) => log.Name),
+            new TableColumn<GeocacheLog>(ColType,      (idx, log) => log.Type),
+            new TableColumn<GeocacheLog>(ColSize,      (idx, log) => log.Size),
+            new TableColumn<GeocacheLog>(ColDifficulty,(idx, log) => log.Difficulty),
+            new TableColumn<GeocacheLog>(ColTerrain,   (idx, log) => log.Terrain),
+            new TableColumn<GeocacheLog>(ColCountry,   (idx, log) => log.Country),
+            new TableColumn<GeocacheLog>(ColPlacedBy,  (idx, log) => log.PlacedBy.ToGcUserLink(log.OwnerId)),
+            new TableColumn<GeocacheLog>(ColCoords,    (idx, log) => log.GeoLocation.ToGoogleMapsLink()),
+            new TableColumn<GeocacheLog>(ColLogType,   (idx, log) => log.LogType),
+            new TableColumn<GeocacheLog>(ColLog,       (idx, log) => TextVisitLog.ToLogLink(log.LogId))
         };
 
         private static readonly TableColumn<GeocacheLog>[] ShortInfoTableSpec =
         {
-            new TableColumn<GeocacheLog>("Found-Idx",  (idx, log) => log.FoundIndex),
-            new TableColumn<GeocacheLog>("Found",      (idx, log) => log.FoundDate),
-            new TableColumn<GeocacheLog>("Placed",     (idx, log) => log.Placed),
-            new TableColumn<GeocacheLog>("GC-Code",    (idx, log) => log.Code.ToLink(log.Code.ToCoordInfoUrl())),
-            new TableColumn<GeocacheLog>("Name",       (idx, log) => log.Name),
-            new TableColumn<GeocacheLog>("Type",       (idx, log) => log.Type),
-            new TableColumn<GeocacheLog>("Size",       (idx, log) => log.Size),
-            new TableColumn<GeocacheLog>("Difficulty", (idx, log) => log.Difficulty),
-            new TableColumn<GeocacheLog>("Terrain",    (idx, log) => log.Terrain),
-            new TableColumn<GeocacheLog>("Country",    (idx, log) => log.Country),
-            new TableColumn<GeocacheLog>("PlacedBy",   (idx, log) => log.PlacedBy.ToGcUserLink(log.OwnerId)),
-            new TableColumn<GeocacheLog>("Coords",     (idx, log) => log.GeoLocation.ToGoogleMapsLink()),
-            new TableColumn<GeocacheLog>("LogType",    (idx, log) => log.LogType),
-            new TableColumn<GeocacheLog>("Log",        (idx, log) => "Visit Log".ToLogLink(log.LogId))
+            new TableColumn<GeocacheLog>(ColFoundIdx,  (idx, log) => log.FoundIndex),
+            new TableColumn<GeocacheLog>(ColFound,     (idx, log) => log.FoundDate),
+            new TableColumn<GeocacheLog>(ColPlaced,    (idx, log) => log.Placed),
+            new TableColumn<GeocacheLog>(ColGcCode,    (idx, log) => log.Code.ToLink(log.Code.ToCoordInfoUrl())),
+            new TableColumn<GeocacheLog>(ColName,      (idx, log) => log.Name),
+            new TableColumn<GeocacheLog>(ColType,      (idx, log) => log.Type),
+            new TableColumn<GeocacheLog>(ColSize,      (idx, log) => log.Size),
+            new TableColumn<GeocacheLog>(ColDifficulty,(idx, log) => log.Difficulty),
+            new TableColumn<GeocacheLog>(ColTerrain,   (idx, log) => log.Terrain),
+            new TableColumn<GeocacheLog>(ColCountry,   (idx, log) => log.Country),
+            new TableColumn<GeocacheLog>(ColPlacedBy,  (idx, log) => log.PlacedBy.ToGcUserLink(log.OwnerId)),
+            new TableColumn<GeocacheLog>(ColCoords,    (idx, log) => log.GeoLocation.ToGoogleMapsLink()),
+            new TableColumn<GeocacheLog>(ColLogType,   (idx, log) => log.LogType),
+            new TableColumn<GeocacheLog>(ColLog,       (idx, log) => TextVisitLog.ToLogLink(log.LogId))
         };
 
         private static readonly TableColumn<SimpleLogStat>[] SimpleLogStatTableSpec =
         {
-            new TableColumn<SimpleLogStat>("Description", (idx, stat) => stat.Text),
-            new TableColumn<SimpleLogStat>("GC-Code",     (idx, stat) => stat.Log.Code.ToLink(stat.Log.Code.ToCoordInfoUrl())),
-            new TableColumn<SimpleLogStat>("Found",       (idx, stat) => stat.Log.FoundDate),
-            new TableColumn<SimpleLogStat>("Name",        (idx, stat) => stat.Log.Name),
-            new TableColumn<SimpleLogStat>("Type",        (idx, stat) => stat.Log.Type),
-            new TableColumn<SimpleLogStat>("Coords",      (idx, stat) => stat.Log.GeoLocation.ToGoogleMapsLink()),
-            new TableColumn<SimpleLogStat>("Log",         (idx, stat) => "Visit Log".ToLogLink(stat.Log.LogId))
+            new TableColumn<SimpleLogStat>(ColDescription,(idx, stat) => stat.Text),
+            new TableColumn<SimpleLogStat>(ColGcCode,     (idx, stat) => stat.Log.Code.ToLink(stat.Log.Code.ToCoordInfoUrl())),
+            new TableColumn<SimpleLogStat>(ColFound,      (idx, stat) => stat.Log.FoundDate),
+            new TableColumn<SimpleLogStat>(ColName,       (idx, stat) => stat.Log.Name),
+            new TableColumn<SimpleLogStat>(ColType,       (idx, stat) => stat.Log.Type),
+            new TableColumn<SimpleLogStat>(ColCoords,     (idx, stat) => stat.Log.GeoLocation.ToGoogleMapsLink()),
+            new TableColumn<SimpleLogStat>(ColLog,        (idx, stat) => TextVisitLog.ToLogLink(stat.Log.LogId))
         };
 
         private static TableColumn<SimpleStat>[] GetSimpleStatSpec(string text)
         {
             return new[]
             {
-                new TableColumn<SimpleStat>("Nr",     (idx, stat) => idx),
-                new TableColumn<SimpleStat>(text,     (idx, stat) => stat.Text),
-                new TableColumn<SimpleStat>("Founds", (idx, stat) => stat.Founds)
+                new TableColumn<SimpleStat>(ColNr,     (idx, stat) => idx),
+                new TableColumn<SimpleStat>(text,      (idx, stat) => stat.Text),
+                new TableColumn<SimpleStat>(ColFounds, (idx, stat) => stat.Founds)
             };
         }
 
+        /// <summary>
+        /// List of analyzer methods to be executed.
+        /// </summary>
         private static readonly Action<IEnumerable<GeocacheLog>, HtmlGenerator>[] AnalyzingMethods = 
         {
             FoundsByCountry,
