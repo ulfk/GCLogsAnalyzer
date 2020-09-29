@@ -1,34 +1,35 @@
 ﻿using System;
-using System.Globalization;
 
 namespace GCLogsAnalyzer
 {
     public class GeoLocation
     {
-        // currently we don't need to set this from outside so leave it private
-        private readonly CultureInfo _culture = new CultureInfo("en-US");
-
         public double Lat { get; set; }
 
         public double Lon { get; set; }
 
-        public string LatString => Lat.ToString(_culture);
+        public string LatString => Lat.ToString(GroundspeakHelper.CultureInfo);
 
-        public string LonString => Lon.ToString(_culture);
+        public string LonString => Lon.ToString(GroundspeakHelper.CultureInfo);
 
         public override string ToString()
         {
-            var latChar = Lat >= 0.0 ? 'N' : 'S';
-            var lat = Math.Abs(Lat);
-            var latInt = Math.Truncate(lat);
-            var latDec = lat - latInt;
+            var (latChar, latDegree, latMin, latMinFraction) = GetPositionValues(Lat, 'N', 'S');
+            var (lonChar, lonDegree, lonMin, lonMinFraction) = GetPositionValues(Lon, 'E', 'W');
 
-            var lonChar = Lon >= 0.0 ? 'E' : 'W';
-            var lon = Math.Abs(Lon);
-            var lonInt = Math.Truncate(lon);
-            var lonDec = lon - lonInt;
+            return $"{latChar} {latDegree:00}° {latMin:00}.{latMinFraction:000} {lonChar} {lonDegree:000}° {lonMin:00}.{lonMinFraction:000}";
+        }
 
-            return $"{latChar} {latInt:00}° {latDec.ToString("00.000", _culture)} {lonChar} {lonInt:000}° {lonDec.ToString("00.000", _culture)}";
+        private static (char, int, int, int) GetPositionValues(double value, char positive, char negative)
+        {
+            var charVal = value >= 0.0 ? positive : negative;
+            var absValue = Math.Abs(value);
+            var degree = Math.Truncate(absValue);
+            var minutes = (absValue - degree) * 60.0;
+            var minutesInt = Math.Truncate(minutes);
+            var minutesFaction = Math.Round((minutes - minutesInt) * 1000.0);
+
+            return (charVal, (int)degree, (int)minutesInt, (int)minutesFaction);
         }
     }
 }
