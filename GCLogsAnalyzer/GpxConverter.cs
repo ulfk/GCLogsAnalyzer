@@ -80,6 +80,13 @@ namespace GCLogsAnalyzer
                         break;
                     case "groundspeak:difficulty": log.Difficulty = GetElementAsDouble(reader); break;
                     case "groundspeak:terrain": log.Terrain = GetElementAsDouble(reader); break;
+                    case "groundspeak:cache": 
+                        if(reader.HasAttributes)
+                        {
+                            log.Archived = GetAttributeAsBool(reader, "archived");
+                            log.Available = GetAttributeAsBool(reader, "available");
+                        }
+                        break;
                 }
             }
 
@@ -132,6 +139,8 @@ namespace GCLogsAnalyzer
 
         private static string GetElementAsString(XmlReader reader) => reader.ReadElementContentAsString();
 
+        private static bool GetAttributeAsBool(XmlReader reader, string name) => ToBool(reader.GetAttribute(name));
+
         private DateTime GetElementAsDateTime(XmlReader reader)
         {
             var value = GetElementAsString(reader);
@@ -143,6 +152,11 @@ namespace GCLogsAnalyzer
         {
             var value = GetElementAsString(reader);
             return ToDouble(value);
+        }
+
+        private static bool ToBool(string value)
+        {
+            return value.ToLower() == "true";
         }
 
         private double ToDouble(string value)

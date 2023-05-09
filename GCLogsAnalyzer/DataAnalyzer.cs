@@ -46,7 +46,7 @@ namespace GCLogsAnalyzer
             CreateLogColumn(ColFoundIdx,  (idx, log) => log.FoundIndex),
             CreateLogColumn(ColFound,     (idx, log) => log.FoundDate),
             CreateLogColumn(ColPlaced,    (idx, log) => log.Placed),
-            CreateLogColumn(ColGcCode,    (idx, log) => log.Code.ToLink(log.Code.ToCoordInfoUrl())),
+            CreateLogColumn(ColGcCode,    (idx, log) => log.ToCodeLinkWithState()),
             CreateLogColumn(ColName,      (idx, log) => log.Name),
             CreateLogColumn(ColType,      (idx, log) => log.Type),
             CreateLogColumn(ColSize,      (idx, log) => log.Size),
@@ -64,7 +64,7 @@ namespace GCLogsAnalyzer
             CreateLogColumn(ColFoundIdx,  (idx, log) => log.FoundIndex),
             CreateLogColumn(ColFound,     (idx, log) => log.FoundDate),
             CreateLogColumn(ColPlaced,    (idx, log) => log.Placed),
-            CreateLogColumn(ColGcCode,    (idx, log) => log.Code.ToLink(log.Code.ToCoordInfoUrl())),
+            CreateLogColumn(ColGcCode,    (idx, log) => log.ToCodeLinkWithState()),
             CreateLogColumn(ColName,      (idx, log) => log.Name),
             CreateLogColumn(ColType,      (idx, log) => log.Type),
             CreateLogColumn(ColSize,      (idx, log) => log.Size),
@@ -80,7 +80,7 @@ namespace GCLogsAnalyzer
         private static readonly TableColumn<SimpleLogStat>[] SimpleLogStatTableSpec =
         {
             CreateLogStatColumn(ColDescription,(idx, stat) => stat.Text),
-            CreateLogStatColumn(ColGcCode,     (idx, stat) => stat.Log.Code.ToLink(stat.Log.Code.ToCoordInfoUrl())),
+            CreateLogStatColumn(ColGcCode,     (idx, stat) => stat.Log.ToCodeLinkWithState()),
             CreateLogStatColumn(ColFound,      (idx, stat) => stat.Log.FoundDate),
             CreateLogStatColumn(ColName,       (idx, stat) => stat.Log.Name),
             CreateLogStatColumn(ColType,       (idx, stat) => stat.Log.Type),

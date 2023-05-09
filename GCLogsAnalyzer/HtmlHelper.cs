@@ -95,6 +95,18 @@ div.table {
             return $"<a href=\"{url}\" {(openInBlank ? "target=\"_blank\"" : "")}>{text}</a>";
         }
 
+        public static string ToCodeLinkWithState(this GeocacheLog log)
+        {
+            return log.GetStateIcon() + "&nbsp;" + log.Code.ToLink(log.Code.ToCoordInfoUrl());
+        }
+
+        private static string GetStateIcon(this  GeocacheLog log)
+        {
+            if (log.Archived) return "&#x2612;";
+            if (log.Available) return "&#x2611";
+            return "&#x2610";
+        }
+
         public static string ToGcUserLink(this string text, string userId)
         {
             return text.ToLink(userId.GetUserUrl());

@@ -95,5 +95,15 @@ namespace GCLogsAnalyzer
         /// Type of Log
         /// </summary>
         public string LogType { get; set; }
+
+        /// <summary>
+        /// Is cache archived?
+        /// </summary>
+        public bool Archived { get; set; }
+
+        /// <summary>
+        /// Is cache available?
+        /// </summary>
+        public bool Available { get; set; }
     }
 }
