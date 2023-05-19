@@ -1,16 +1,14 @@
-﻿
-namespace GCLogsAnalyzer
+﻿namespace GCLogsAnalyzer;
+
+public class SimpleStat
 {
-    public class SimpleStat
+    public SimpleStat(string text, int founds)
     {
-        public SimpleStat(string text, int founds)
-        {
-            Text = text;
-            Founds = founds;
-        }
-
-        public string Text { get; set; }
-
-        public int Founds { get; set; }
+        Text = text;
+        Founds = founds;
     }
+
+    public string Text { get; set; }
+
+    public int Founds { get; set; }
 }

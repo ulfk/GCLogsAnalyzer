@@ -2,50 +2,50 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace GCLogsAnalyzer
+namespace GCLogsAnalyzer;
+
+public static class HtmlHelper
 {
-    public static class HtmlHelper
+    public static string TableRow(params object[] values)
     {
-        public static string TableRow(params object[] values)
+        return Row(values, false);
+    }
+
+    public static string TableRowHeader(params object[] values)
+    {
+        return Row(values, true);
+    }
+
+    private static string Row(IEnumerable<object> values, bool isHeader)
+    {
+        var buffer = new StringBuilder();
+        buffer.Append("<tr>");
+        var cellTag = isHeader ? "th" : "td";
+        foreach (var value in values)
         {
-            return Row(values, false);
+            buffer.Append($"<{cellTag}>{ValueToString(value)}</{cellTag}>");
         }
 
-        public static string TableRowHeader(params object[] values)
-        {
-            return Row(values, true);
-        }
+        buffer.Append("</tr>");
+        return buffer.ToString();
+    }
 
-        private static string Row(IEnumerable<object> values, bool isHeader)
-        {
-            var buffer = new StringBuilder();
-            buffer.Append("<tr>");
-            var cellTag = isHeader ? "th" : "td";
-            foreach (var value in values)
-            {
-                buffer.Append($"<{cellTag}>{ValueToString(value)}</{cellTag}>");
-            }
+    public static string Headline(string name, string text, int level = 2) => $"<h{level} id=\"{name}\">{text}</h{level}>";
 
-            buffer.Append("</tr>");
-            return buffer.ToString();
-        }
+    /* Fixed Table-Header:
+     https://css-tricks.com/position-sticky-and-table-headers/
+     https://stackoverflow.com/questions/19559197/how-to-make-scrollable-table-with-fixed-headers-using-css
+    */
 
-        public static string Headline(string name, string text, int level = 2) => $"<h{level} id=\"{name}\">{text}</h{level}>";
-
-        /* Fixed Table-Header:
-         https://css-tricks.com/position-sticky-and-table-headers/
-         https://stackoverflow.com/questions/19559197/how-to-make-scrollable-table-with-fixed-headers-using-css
-        */
-
-        public const string PageHeader = @"<html>
+    public const string PageHeader = @"<html>
 <head>
 <title>Founds</title>
 </head>
 <body>";
 
-        public const string PageFooter = "</body>\n</html>";
+    public const string PageFooter = "</body>\n</html>";
 
-        public const string StyleAndSectionHeader = @"
+    public const string StyleAndSectionHeader = @"
 <div id=""gc-logs-analyzed"">
 <style type=""text/css"" scoped>
 #gc-logs-analyzed {
@@ -84,64 +84,63 @@ div.table {
 </style>
 ";
 
-        public const string StyleAndSectionFooter = "</div>";
+    public const string StyleAndSectionFooter = "</div>";
 
-        public static string TableHeader(string sectionName, string headerRow) => $"<div id=\"{sectionName}\" class=\"table\">\n<table><thead>{headerRow}</thead>\n<tbody>";
+    public static string TableHeader(string sectionName, string headerRow) => $"<div id=\"{sectionName}\" class=\"table\">\n<table><thead>{headerRow}</thead>\n<tbody>";
 
-        public const string TableFooter = "</tbody>\n</table>\n</div>";
-            
-        public static string ToLink(this string text, string url, bool openInBlank = true)
-        {
-            return $"<a href=\"{url}\" {(openInBlank ? "target=\"_blank\"" : "")}>{text}</a>";
-        }
-
-        public static string ToCodeLinkWithState(this GeocacheLog log)
-        {
-            return log.GetStateIcon() + "&nbsp;" + log.Code.ToLink(log.Code.ToCoordInfoUrl());
-        }
-
-        private static string GetStateIcon(this  GeocacheLog log)
-        {
-            if (log.Archived) return "&#x2612;";
-            if (log.Available) return "&#x2611";
-            return "&#x2610";
-        }
-
-        public static string ToGcUserLink(this string text, string userId)
-        {
-            return text.ToLink(userId.GetUserUrl());
-        }
-
-        public static string ToGoogleMapsLink(this GeoLocation geoLocation)
-        {
-            return geoLocation.ToString().ToGoogleMapsLink(geoLocation.LatString, geoLocation.LonString);
-        }
-
-        public static string ToGoogleMapsLink(this string value, string lat, string lon)
-        {
-            // https://stackoverflow.com/questions/1801732/how-do-i-link-to-google-maps-with-a-particular-longitude-and-latitude/52943975#52943975
-
-            return value.ToLink($"https://www.google.com/maps/search/?api=1&query={lat},{lon}");
-        }
-
-        public static string ToLogLink(this string value, string logId)
-        {
-            return value.ToLink(GroundspeakHelper.GetLogUrl(logId));
-        }
+    public const string TableFooter = "</tbody>\n</table>\n</div>";
         
-        private static string ValueToString(object value)
+    public static string ToLink(this string text, string url, bool openInBlank = true)
+    {
+        return $"<a href=\"{url}\" {(openInBlank ? "target=\"_blank\"" : "")}>{text}</a>";
+    }
+
+    public static string ToCodeLinkWithState(this GeocacheLog log)
+    {
+        return log.GetStateIcon() + "&nbsp;" + log.Code.ToLink(log.Code.ToCoordInfoUrl());
+    }
+
+    private static string GetStateIcon(this  GeocacheLog log)
+    {
+        if (log.Archived) return "&#x2612;";
+        if (log.Available) return "&#x2611";
+        return "&#x2610";
+    }
+
+    public static string ToGcUserLink(this string text, string userId)
+    {
+        return text.ToLink(userId.GetUserUrl());
+    }
+
+    public static string ToGoogleMapsLink(this GeoLocation geoLocation)
+    {
+        return geoLocation.ToString().ToGoogleMapsLink(geoLocation.LatString, geoLocation.LonString);
+    }
+
+    public static string ToGoogleMapsLink(this string value, string lat, string lon)
+    {
+        // https://stackoverflow.com/questions/1801732/how-do-i-link-to-google-maps-with-a-particular-longitude-and-latitude/52943975#52943975
+
+        return value.ToLink($"https://www.google.com/maps/search/?api=1&query={lat},{lon}");
+    }
+
+    public static string ToLogLink(this string value, string logId)
+    {
+        return value.ToLink(GroundspeakHelper.GetLogUrl(logId));
+    }
+    
+    private static string ValueToString(object value)
+    {
+        switch (value)
         {
-            switch (value)
-            {
-                case double dbl:
-                    return dbl.ToString("G29");
-                case DateTime date:
-                    return date.ToString("dd.MM.yyyy");
-                case string str:
-                    return str;
-                default:
-                    return value.ToString();
-            }
+            case double dbl:
+                return dbl.ToString("G29");
+            case DateTime date:
+                return date.ToString("dd.MM.yyyy");
+            case string str:
+                return str;
+            default:
+                return value.ToString();
         }
     }
 }
