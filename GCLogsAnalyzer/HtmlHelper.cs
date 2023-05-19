@@ -140,7 +140,7 @@ div.table {
             case string str:
                 return str;
             default:
-                return value.ToString();
+                return value.ToString() ?? "";
         }
     }
 }
