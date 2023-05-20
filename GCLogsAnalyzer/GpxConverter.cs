@@ -89,10 +89,32 @@ public class GpxConverter
                         log.Available = GetAttributeAsBool(reader, "available");
                     }
                     break;
+                case "groundspeak:attributes": ReadAttributesSection(reader, log); break;
             }
         }
 
         return log;
+    }
+
+    private void ReadAttributesSection(XmlReader reader, GeocacheLog log)
+    {
+        while (reader.Read())
+        {
+            if (reader.Name == "groundspeak:attributes")
+                break;
+            if (reader.NodeType != XmlNodeType.Element || reader.Name != "groundspeak:attribute")
+                continue;
+
+            var attribute = new Attribute();
+            if (reader.HasAttributes)
+            {
+                attribute.Id = GetAttributeAsInt(reader, "id");
+                attribute.Inverted = GetAttributeAsInt(reader, "inc") == 0;
+            }
+            attribute.Name = GetElementAsString(reader);
+
+            log.Attributes.Add(attribute);
+        }
     }
 
     private void ReadLogEntrySection(XmlReader reader, GeocacheLog log)
@@ -137,6 +159,8 @@ public class GpxConverter
 
     private double GetAttributeAsDouble(XmlReader reader, string name) => ToDouble(reader.GetAttribute(name));
 
+    private int GetAttributeAsInt(XmlReader reader, string name) => ToInt(reader.GetAttribute(name));
+
     private static string GetAttributeAsString(XmlReader reader, string name) => reader.GetAttribute(name) ?? string.Empty;
 
     private static string GetElementAsString(XmlReader reader) => reader.ReadElementContentAsString();
@@ -151,18 +175,14 @@ public class GpxConverter
     }
 
     private double GetElementAsDouble(XmlReader reader)
-    {
-        var value = GetElementAsString(reader);
-        return ToDouble(value);
-    }
+        => ToDouble(GetElementAsString(reader));
 
     private static bool ToBool(string? value)
-    {
-        return value != null && value.ToLower() == "true";
-    }
+        => value != null && value.ToLower() == "true";
 
     private double ToDouble(string? value)
-    {
-        return double.Parse(value ?? "0", _cultureInfo);
-    }
+        => double.Parse(value ?? "0", _cultureInfo);
+
+    private int ToInt(string? value)
+        => int.Parse(value ?? "0", _cultureInfo);
 }

@@ -1,20 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 
 namespace GCLogsAnalyzer;
 
 public static class HtmlHelper
 {
-    public static string TableRow(params object[] values)
-    {
-        return Row(values, false);
-    }
+    public static string TableRow(params object[] values) => Row(values, false);
 
-    public static string TableRowHeader(params object[] values)
-    {
-        return Row(values, true);
-    }
+    public static string TableRowHeader(params object[] values) => Row(values, true);
 
     private static string Row(IEnumerable<object> values, bool isHeader)
     {
@@ -81,66 +76,81 @@ div.table {
     max-height:500px;
     border: 1px solid #ddd;
 }
+
+/* Tooltip container (copied from: https://www.w3schools.com/css/css_tooltip.asp) */
+.tooltip {
+  /*position: relative;*/
+  display: inline-block;
+  border-bottom: 1px dotted black;
+}
+/* Tooltip text */
+.tooltip .tooltiptext {
+  visibility: hidden;
+  
+  background-color: #eee;
+  color: #333;
+  text-align: left;
+  padding: 6px 6px;
+  border-radius: 6px;
+ 
+  position: absolute;
+  z-index: 1;
+}
+/* Show the tooltip text when you mouse over the tooltip container */
+.tooltip:hover .tooltiptext {
+  visibility: visible;
+}
 </style>
 ";
 
+    public static string ToTextWithTooltip(this string text, IEnumerable<string> tooltipLines)
+        => $"<div class=\"tooltip\">{text}<span class=\"tooltiptext\">{string.Join("<br>", tooltipLines.Select(x => "<nobr>"+x+"</nobr>"))}</span></div>";
+
+    public static string GetAttributes(this GeocacheLog log)
+    {
+        var attrCount = log.Attributes.Count;
+        if (attrCount == 0) return "&nbsp; - &nbsp;";
+        var text = $"{attrCount} Attribute{(attrCount > 1 ? "s" : "")}";
+        return text.ToTextWithTooltip(log.Attributes.Select(x => (x.Inverted ? "Not: " : "") + x.Name));
+    }
+
     public const string StyleAndSectionFooter = "</div>";
 
-    public static string TableHeader(string sectionName, string headerRow) => $"<div id=\"{sectionName}\" class=\"table\">\n<table><thead>{headerRow}</thead>\n<tbody>";
+    public static string TableHeader(string sectionName, string headerRow) 
+        => $"<div id=\"{sectionName}\" class=\"table\">\n<table><thead>{headerRow}</thead>\n<tbody>";
 
     public const string TableFooter = "</tbody>\n</table>\n</div>";
         
     public static string ToLink(this string text, string url, bool openInBlank = true)
-    {
-        return $"<a href=\"{url}\" {(openInBlank ? "target=\"_blank\"" : "")}>{text}</a>";
-    }
+        => $"<a href=\"{url}\" {(openInBlank ? "target=\"_blank\"" : "")}>{text}</a>";
 
     public static string ToCodeLinkWithState(this GeocacheLog log)
-    {
-        return log.GetStateIcon() + "&nbsp;" + log.Code.ToLink(log.Code.ToCoordInfoUrl());
-    }
+        => log.GetStateIcon() + "&nbsp;" + log.Code.ToLink(log.Code.ToCoordInfoUrl());
 
     private static string GetStateIcon(this  GeocacheLog log)
-    {
-        if (log.Archived) return "&#x2612;";
-        if (log.Available) return "&#x2611";
-        return "&#x2610";
-    }
+        => log.Archived ? "&#x2612;" : (log.Available ? "&#x2611" : "&#x2610");
 
     public static string ToGcUserLink(this string text, string userId)
-    {
-        return text.ToLink(userId.GetUserUrl());
-    }
+        => text.ToLink(userId.GetUserUrl());
 
     public static string ToGoogleMapsLink(this GeoLocation geoLocation)
-    {
-        return geoLocation.ToString().ToGoogleMapsLink(geoLocation.LatString, geoLocation.LonString);
-    }
+        => geoLocation.ToString().ToGoogleMapsLink(geoLocation.LatString, geoLocation.LonString);
 
+    // https://stackoverflow.com/questions/1801732/how-do-i-link-to-google-maps-with-a-particular-longitude-and-latitude/52943975#52943975
     public static string ToGoogleMapsLink(this string value, string lat, string lon)
-    {
-        // https://stackoverflow.com/questions/1801732/how-do-i-link-to-google-maps-with-a-particular-longitude-and-latitude/52943975#52943975
-
-        return value.ToLink($"https://www.google.com/maps/search/?api=1&query={lat},{lon}");
-    }
+        => value.ToLink($"https://www.google.com/maps/search/?api=1&query={lat},{lon}");
 
     public static string ToLogLink(this string value, string logId)
-    {
-        return value.ToLink(GroundspeakHelper.GetLogUrl(logId));
-    }
+        => value.ToLink(GroundspeakHelper.GetLogUrl(logId));
     
     private static string ValueToString(object value)
     {
-        switch (value)
+        return value switch
         {
-            case double dbl:
-                return dbl.ToString("G29");
-            case DateTime date:
-                return date.ToString("dd.MM.yyyy");
-            case string str:
-                return str;
-            default:
-                return value.ToString() ?? "";
-        }
+            double dbl => dbl.ToString("G29"),
+            DateTime date => date.ToString("dd.MM.yyyy"),
+            string str => str,
+            _ => value.ToString() ?? "",
+        };
     }
 }

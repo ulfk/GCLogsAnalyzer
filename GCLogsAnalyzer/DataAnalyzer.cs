@@ -23,6 +23,7 @@ public static class DataAnalyzer
     private const string ColLogType = "Log Type";
     private const string ColLog = "Log";
     private const string ColDescription = "Description";
+    private const string ColAttributes = "Attributes";
     private const string TextVisitLog = "Visit Log";
 
     private static TableColumn<GeocacheLog> CreateLogColumn(
@@ -54,28 +55,29 @@ public static class DataAnalyzer
         CreateLogColumn(ColTerrain,   (idx, log) => log.Terrain),
         CreateLogColumn(ColCountry,   (idx, log) => log.Country),
         CreateLogColumn(ColPlacedBy,  (idx, log) => log.PlacedBy.ToGcUserLink(log.OwnerId)),
+        CreateLogColumn(ColAttributes,(idx, log) => log.GetAttributes()),
         CreateLogColumn(ColCoords,    (idx, log) => log.GeoLocation.ToGoogleMapsLink()),
         CreateLogColumn(ColLogType,   (idx, log) => log.LogType),
         CreateLogColumn(ColLog,       (idx, log) => TextVisitLog.ToLogLink(log.LogId))
     };
 
-    private static readonly TableColumn<GeocacheLog>[] ShortInfoTableSpec =
-    {
-        CreateLogColumn(ColFoundIdx,  (idx, log) => log.FoundIndex),
-        CreateLogColumn(ColFound,     (idx, log) => log.FoundDate),
-        CreateLogColumn(ColPlaced,    (idx, log) => log.Placed),
-        CreateLogColumn(ColGcCode,    (idx, log) => log.ToCodeLinkWithState()),
-        CreateLogColumn(ColName,      (idx, log) => log.Name),
-        CreateLogColumn(ColType,      (idx, log) => log.Type),
-        CreateLogColumn(ColSize,      (idx, log) => log.Size),
-        CreateLogColumn(ColDifficulty,(idx, log) => log.Difficulty),
-        CreateLogColumn(ColTerrain,   (idx, log) => log.Terrain),
-        CreateLogColumn(ColCountry,   (idx, log) => log.Country),
-        CreateLogColumn(ColPlacedBy,  (idx, log) => log.PlacedBy.ToGcUserLink(log.OwnerId)),
-        CreateLogColumn(ColCoords,    (idx, log) => log.GeoLocation.ToGoogleMapsLink()),
-        CreateLogColumn(ColLogType,   (idx, log) => log.LogType),
-        CreateLogColumn(ColLog,       (idx, log) => TextVisitLog.ToLogLink(log.LogId))
-    };
+    private static readonly TableColumn<GeocacheLog>[] ShortInfoTableSpec = FullInfoTableSpec;
+    //{
+    //    CreateLogColumn(ColFoundIdx,  (idx, log) => log.FoundIndex),
+    //    CreateLogColumn(ColFound,     (idx, log) => log.FoundDate),
+    //    CreateLogColumn(ColPlaced,    (idx, log) => log.Placed),
+    //    CreateLogColumn(ColGcCode,    (idx, log) => log.ToCodeLinkWithState()),
+    //    CreateLogColumn(ColName,      (idx, log) => log.Name),
+    //    CreateLogColumn(ColType,      (idx, log) => log.Type),
+    //    CreateLogColumn(ColSize,      (idx, log) => log.Size),
+    //    CreateLogColumn(ColDifficulty,(idx, log) => log.Difficulty),
+    //    CreateLogColumn(ColTerrain,   (idx, log) => log.Terrain),
+    //    CreateLogColumn(ColCountry,   (idx, log) => log.Country),
+    //    CreateLogColumn(ColPlacedBy,  (idx, log) => log.PlacedBy.ToGcUserLink(log.OwnerId)),
+    //    CreateLogColumn(ColCoords,    (idx, log) => log.GeoLocation.ToGoogleMapsLink()),
+    //    CreateLogColumn(ColLogType,   (idx, log) => log.LogType),
+    //    CreateLogColumn(ColLog,       (idx, log) => TextVisitLog.ToLogLink(log.LogId))
+    //};
 
     private static readonly TableColumn<SimpleLogStat>[] SimpleLogStatTableSpec =
     {
@@ -196,7 +198,12 @@ public static class DataAnalyzer
         var anniversaryList = foundLogs
             .OrderBy(f => f.FoundDate)
             .Where((l, i) => i == 0 || (i + 1) % 100 == 0);
-        htmlGenerator.AddTableSection(anniversaryList, "Every 100th Found", "Every100thFound", ShortInfoTableSpec);
+
+        htmlGenerator.AddTableSection(
+            anniversaryList, 
+            "Every 100th Found", 
+            "Every100thFound", 
+            ShortInfoTableSpec);
     }
 
     private static void FoundsByContainerSize(IEnumerable<GeocacheLog> foundLogs, HtmlGenerator htmlGenerator)
@@ -206,7 +213,10 @@ public static class DataAnalyzer
             .Select(x => new SimpleStat(x.Key, x.Count()))
             .OrderByDescending(s => s.Founds);
 
-        htmlGenerator.AddTableSection(sizeStats, "Founds by Container Size", "FoundsByContainerSize",
+        htmlGenerator.AddTableSection(
+            sizeStats, 
+            "Founds by Container Size", 
+            "FoundsByContainerSize",
             GetSimpleStatSpec("Size"));
     }
 
@@ -246,6 +256,10 @@ public static class DataAnalyzer
             .Select(x => new SimpleStat(x.Key, x.Count()))
             .OrderByDescending(s => s.Founds);
 
-        htmlGenerator.AddTableSection(countryStats, "Founds by Country", "FoundsByCountry", GetSimpleStatSpec("Country"));
+        htmlGenerator.AddTableSection(
+            countryStats, 
+            "Founds by Country", 
+            "FoundsByCountry", 
+            GetSimpleStatSpec("Country"));
     }
 }

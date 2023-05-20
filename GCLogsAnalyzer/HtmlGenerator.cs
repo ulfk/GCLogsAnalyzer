@@ -22,10 +22,10 @@ public class HtmlGenerator
 
     private readonly Dictionary<string, Section> _sections = new Dictionary<string, Section>();
 
-    public void GenerateHtmlFile(string filename, bool addHtmlHeader = true)
+    public void GenerateHtmlFile(string filename, bool addHtmlDocumentTags = true)
     {
         var buffer = new StringBuilder();
-        if(addHtmlHeader) 
+        if(addHtmlDocumentTags) 
             buffer.AppendLine(HtmlHelper.PageHeader);
         buffer.AppendLine(HtmlHelper.StyleAndSectionHeader);
 
@@ -49,7 +49,7 @@ public class HtmlGenerator
         }
 
         buffer.AppendLine(HtmlHelper.StyleAndSectionFooter);
-        if (addHtmlHeader)
+        if (addHtmlDocumentTags)
             buffer.AppendLine(HtmlHelper.PageFooter);
 
         File.WriteAllText(filename, buffer.ToString());

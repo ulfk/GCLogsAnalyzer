@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace GCLogsAnalyzer;
 
@@ -105,4 +106,9 @@ public class GeocacheLog
     /// Is cache available?
     /// </summary>
     public bool Available { get; set; }
+
+    /// <summary>
+    /// List of cache attributes
+    /// </summary>
+    public List<Attribute> Attributes { get; set; } = new List<Attribute>();
 }
