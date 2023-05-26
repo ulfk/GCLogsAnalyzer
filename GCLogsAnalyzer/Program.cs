@@ -17,11 +17,16 @@ public class Program
         var htmlFile = args[1];
         var htmlGenerator = new HtmlGenerator();
 
+        Console.WriteLine($"Reading logs from '{filename}'");
         var converter = new GpxConverter(filename).Parse();
         Console.WriteLine($"{converter.FoundLogs.Count} logs read from file");
 
         DataAnalyzer.Analyze(converter.FoundLogs, htmlGenerator, Console.WriteLine);
         htmlGenerator.GenerateHtmlFile(htmlFile);
         Console.WriteLine($"HTML-Output written to '{htmlFile}'");
+
+        //var dynamicHtmlFile = $"{htmlFile}-js.html";
+        //htmlGenerator.GenerateDynamicHtmlFile(dynamicHtmlFile, converter.FoundLogs);
+        //Console.WriteLine($"Dynamic HTML-Output written to '{dynamicHtmlFile}'");
     }
 }

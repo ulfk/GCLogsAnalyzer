@@ -66,34 +66,44 @@ public class GpxConverter
                 continue;
             switch (reader.Name)
             {
-                case "groundspeak:logs": ReadLogEntrySection(reader, log); break;
-                case "time": log.Placed = GetElementAsDateTime(reader); break;
-                case "name": log.Code = GetElementAsString(reader); break;
-                case "url": log.Url = GetElementAsString(reader); break;
-                case "groundspeak:name": log.Name = GetElementAsString(reader); break;
-                case "groundspeak:long_description": log.Description = GetElementAsString(reader); break;
-                case "groundspeak:type": log.Type = GetElementAsString(reader); break;
-                case "groundspeak:container": log.Size = GetElementAsString(reader); break;
-                case "groundspeak:country": log.Country = GetElementAsString(reader); break;
-                case "groundspeak:state": log.State = GetElementAsString(reader); break;
-                case "groundspeak:owner":
-                    if (reader.HasAttributes) log.OwnerId = GetAttributeAsString(reader, "id");
-                    log.PlacedBy = GetElementAsString(reader); 
-                    break;
+                case "groundspeak:logs":       ReadLogEntrySection(reader, log);            break;
+                case "time":                   log.Placed = GetElementAsDateTime(reader);   break;
+                case "name":                   log.Code = GetElementAsString(reader);       break;
+                case "url":                    log.Url = GetElementAsString(reader);        break;
+                case "groundspeak:name":       log.Name = GetElementAsString(reader);       break;
+                case "groundspeak:type":       log.Type = GetElementAsString(reader);       break;
+                case "groundspeak:container":  log.Size = GetElementAsString(reader);       break;
+                case "groundspeak:country":    log.Country = GetElementAsString(reader);    break;
+                case "groundspeak:state":      log.State = GetElementAsString(reader);      break;
+                case "groundspeak:owner": ReadOwner(reader, log);                      break;
                 case "groundspeak:difficulty": log.Difficulty = GetElementAsDouble(reader); break;
-                case "groundspeak:terrain": log.Terrain = GetElementAsDouble(reader); break;
-                case "groundspeak:cache": 
-                    if(reader.HasAttributes)
-                    {
-                        log.Archived = GetAttributeAsBool(reader, "archived");
-                        log.Available = GetAttributeAsBool(reader, "available");
-                    }
-                    break;
-                case "groundspeak:attributes": ReadAttributesSection(reader, log); break;
+                case "groundspeak:terrain":    log.Terrain = GetElementAsDouble(reader);    break;
+                case "groundspeak:cache": ReadCacheStates(reader, log);                break;
+                case "groundspeak:attributes": ReadAttributesSection(reader, log);          break;
+                // skip long description (not used currently)
+                //case "groundspeak:long_description": log.Description = GetElementAsString(reader); break;
             }
         }
 
         return log;
+    }
+
+    private static void ReadCacheStates(XmlReader reader, GeocacheLog log)
+    {
+        if (reader.HasAttributes)
+        {
+            log.Archived = GetAttributeAsBool(reader, "archived");
+            log.Available = GetAttributeAsBool(reader, "available");
+        }
+    }
+
+    private static void ReadOwner(XmlReader reader, GeocacheLog log)
+    {
+        if (reader.HasAttributes)
+        {
+            log.OwnerId = GetAttributeAsString(reader, "id");
+        }
+        log.PlacedBy = GetElementAsString(reader);
     }
 
     private void ReadAttributesSection(XmlReader reader, GeocacheLog log)

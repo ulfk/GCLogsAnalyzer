@@ -32,13 +32,20 @@ public static class HtmlHelper
      https://stackoverflow.com/questions/19559197/how-to-make-scrollable-table-with-fixed-headers-using-css
     */
 
-    public const string PageHeader = @"<html>
+    public static string PageHeaderBase(string additionalHeadTags = "") => @"<!DOCTYPE html>
+<html>
 <head>
-<title>Founds</title>
+<title>My Geocache Founds</title>
+"+additionalHeadTags+@"
 </head>
 <body>";
 
-    public const string PageFooter = "</body>\n</html>";
+    public static string PageHeader => PageHeaderBase();
+    public static string PageHeaderWithJquery => PageHeaderBase(JqueryHeader);
+
+    public const string JqueryHeader = "<script src=\"https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js\"></script>";
+
+    public const string PageFooter = "</body></html>";
 
     public const string StyleAndSectionHeader = @"
 <div id=""gc-logs-analyzed"">
@@ -142,7 +149,7 @@ div.table {
 
     public static string ToLogLink(this string value, string logId)
         => value.ToLink(GroundspeakHelper.GetLogUrl(logId));
-    
+
     private static string ValueToString(object value)
     {
         return value switch
