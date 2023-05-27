@@ -172,7 +172,7 @@ public static class DataAnalyzer
     private static void FoundsByFoundDate(IEnumerable<GeocacheLog> foundLogs, HtmlGenerator htmlGenerator)
     {
         htmlGenerator.AddTableSection(
-            foundLogs.OrderBy(f => f.FoundDate), 
+            foundLogs.OrderBy(f => f.FoundIndex), 
             "Logs by Found Date", 
             "ByFoundDate",
             ShortInfoTableSpec);
@@ -196,7 +196,7 @@ public static class DataAnalyzer
     private static void AnniversaryFounds(IEnumerable<GeocacheLog> foundLogs, HtmlGenerator htmlGenerator)
     {
         var anniversaryList = foundLogs
-            .OrderBy(f => f.FoundDate)
+            .OrderBy(f => f.FoundIndex)
             .Where((l, i) => i == 0 || (i + 1) % 100 == 0);
 
         htmlGenerator.AddTableSection(

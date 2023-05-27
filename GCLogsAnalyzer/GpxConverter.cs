@@ -39,7 +39,7 @@ public class GpxConverter
         }
 
         var idx = 1;
-        foreach (var log in FoundLogs.OrderBy(f => f.FoundDate))
+        foreach (var log in FoundLogs.OrderBy(f => f.FoundDate).ThenBy(f => f.LogId))
         {
             log.FoundIndex = idx++;
         }
