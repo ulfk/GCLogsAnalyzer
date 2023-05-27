@@ -28,10 +28,10 @@ public class GpxConverter
         using var fileStream = File.OpenRead(_filename);
         var xmlSettings = new XmlReaderSettings { CloseInput = true };
         using var reader = XmlReader.Create(fileStream, xmlSettings);
-        
+
         while (reader.Read())
         {
-            if (reader.NodeType == XmlNodeType.Element && reader.Name == "wpt")
+            if (reader.NodeType == XmlNodeType.Element && reader.IsStartElement("wpt"))
             {
                 var log = ReadLogAndGeocacheDetails(reader);
                 FoundLogs.Add(log);
@@ -75,10 +75,10 @@ public class GpxConverter
                 case "groundspeak:container":  log.Size = GetElementAsString(reader);       break;
                 case "groundspeak:country":    log.Country = GetElementAsString(reader);    break;
                 case "groundspeak:state":      log.State = GetElementAsString(reader);      break;
-                case "groundspeak:owner": ReadOwner(reader, log);                      break;
+                case "groundspeak:owner":      ReadOwner(reader, log);                      break;
                 case "groundspeak:difficulty": log.Difficulty = GetElementAsDouble(reader); break;
                 case "groundspeak:terrain":    log.Terrain = GetElementAsDouble(reader);    break;
-                case "groundspeak:cache": ReadCacheStates(reader, log);                break;
+                case "groundspeak:cache":      ReadCacheStates(reader, log);                break;
                 case "groundspeak:attributes": ReadAttributesSection(reader, log);          break;
                 // skip long description (not used currently)
                 //case "groundspeak:long_description": log.Description = GetElementAsString(reader); break;
@@ -108,6 +108,8 @@ public class GpxConverter
 
     private void ReadAttributesSection(XmlReader reader, GeocacheLog log)
     {
+        if (reader.IsEmptyElement) return;
+
         while (reader.Read())
         {
             if (reader.Name == "groundspeak:attributes")
@@ -129,6 +131,8 @@ public class GpxConverter
 
     private void ReadLogEntrySection(XmlReader reader, GeocacheLog log)
     {
+        if (reader.IsEmptyElement) return;
+
         while (reader.Read())
         {
             if (reader.Name == "groundspeak:logs")
