@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 
 namespace GCLogsAnalyzer;
 
@@ -18,7 +19,8 @@ public class Program
         var htmlGenerator = new HtmlGenerator();
 
         Console.WriteLine($"Reading logs from '{filename}'");
-        var converter = new GpxConverter(filename).Parse();
+        using var fileStream = File.OpenRead(filename);
+        var converter = new GpxConverter().Parse(fileStream);
         Console.WriteLine($"{converter.FoundLogs.Count} logs read from file");
 
         DataAnalyzer.Analyze(converter.FoundLogs, htmlGenerator, Console.WriteLine);

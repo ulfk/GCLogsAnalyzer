@@ -9,23 +9,20 @@ namespace GCLogsAnalyzer;
 
 public class GpxConverter
 {
-    private readonly string _filename;
     private readonly CultureInfo _cultureInfo;
     private readonly TimeZoneInfo _timeZone;
 
     public List<GeocacheLog> FoundLogs { get; set; }
 
-    public GpxConverter(string filename)
+    public GpxConverter()
     {
-        _filename = filename;
         FoundLogs = new List<GeocacheLog>();
         _cultureInfo = GroundspeakHelper.CultureInfo;
         _timeZone = GroundspeakHelper.TimeZoneInfo;
     }
 
-    public GpxConverter Parse()
+    public GpxConverter Parse(Stream fileStream)
     {
-        using var fileStream = File.OpenRead(_filename);
         var xmlSettings = new XmlReaderSettings { CloseInput = true };
         using var reader = XmlReader.Create(fileStream, xmlSettings);
 
