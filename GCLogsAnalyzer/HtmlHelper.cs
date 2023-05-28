@@ -113,6 +113,9 @@ div.table {
     public static string ToTextWithTooltip(this string text, IEnumerable<string> tooltipLines)
         => $"<div class=\"tooltip\">{text}<span class=\"tooltiptext\">{string.Join("<br>", tooltipLines.Select(x => "<nobr>"+x+"</nobr>"))}</span></div>";
 
+    public static string WithTooltip(this string text, string tooltip)
+        => text.ToTextWithTooltip(new[] { tooltip });
+
     public static string GetAttributes(this GeocacheLog log)
     {
         var attrCount = log.Attributes.Count;
@@ -135,7 +138,11 @@ div.table {
         => log.GetStateIcon() + "&nbsp;" + log.Code.ToLink(log.Code.ToCoordInfoUrl());
 
     private static string GetStateIcon(this  GeocacheLog log)
-        => log.Archived ? "&#x2612;" : (log.Available ? "&#x2611" : "&#x2610");
+        => log.Archived 
+        ? "&#x2612;".WithTooltip("Archived") 
+        : (log.Available 
+            ? "&#x2611".WithTooltip("Available") 
+            : "&#x2610".WithTooltip("Deactivated"));
 
     public static string ToGcUserLink(this string text, string userId)
         => text.ToLink(userId.GetUserUrl());
