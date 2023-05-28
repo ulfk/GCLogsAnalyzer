@@ -74,7 +74,7 @@ public static class GroundspeakHelper
     public static CultureInfo CultureInfo => new("en-US");
 
     // all timestamps in the GPX are currently in Pacific Standard Time
-    public static TimeZoneInfo TimeZoneInfo => TimeZoneInfo.GetSystemTimeZones().First(tz => tz.Id == "Pacific Standard Time");
+    public static TimeZoneInfo TimeZoneInfo => TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time"); // GetSystemTimeZones().First(tz => tz.Id == "Pacific Standard Time");
 
     public static bool IsValidLogType(this string logType) => logType == "Found it" || logType == "Webcam Photo Taken" || logType == "Attended";
 }
