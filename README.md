@@ -1,3 +1,5 @@
+[![.NET](https://github.com/ulfk/GCLogsAnalyzer/actions/workflows/dotnet.yml/badge.svg)](https://github.com/ulfk/GCLogsAnalyzer/actions/workflows/dotnet.yml)
+
 # GCLogsAnalyzer
 Quick example-implementation to read "My Founds"-GPX-file from https://www.geocaching.com and produce HTML-page with statistics. 
 
