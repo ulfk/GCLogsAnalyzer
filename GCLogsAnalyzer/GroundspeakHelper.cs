@@ -34,28 +34,28 @@ public static class GroundspeakHelper
     }
 
     /// <summary>
-    /// Calculate ID from GC/GL-code
+    /// Calculate ID from GC/GL-code (currently unused)
     /// </summary>
     /// <param name="code"></param>
     /// <param name="prefixToRemove"></param>
     /// <returns></returns>
     // ReSharper disable once UnusedMember.Local
-    //private static int GetIdFromCode(string code, string? prefixToRemove = null)
-    //{
-    //    var factor = 1;
-    //    var result = 0;
-    //    var value = code;
-    //    if (!string.IsNullOrEmpty(prefixToRemove) && code.StartsWith(prefixToRemove))
-    //        value = code[prefixToRemove.Length..];
-        
-    //    for (var idx = value.Length - 1; idx >= 0; idx--)
-    //    {
-    //        result += LookupTable.IndexOf(value[idx]) * factor;
-    //        factor *= BaseValue;
-    //    }
+    private static int GetIdFromCode(string code, string? prefixToRemove = null)
+    {
+        var factor = 1;
+        var result = 0;
+        var value = code;
+        if (!string.IsNullOrEmpty(prefixToRemove) && code.StartsWith(prefixToRemove))
+            value = code[prefixToRemove.Length..];
 
-    //    return result - IdOffset;
-    //}
+        for (var idx = value.Length - 1; idx >= 0; idx--)
+        {
+            result += LookupTable.IndexOf(value[idx]) * factor;
+            factor *= BaseValue;
+        }
+
+        return result - IdOffset;
+    }
 
     public static string GetLogUrl(string logId)
     {
@@ -74,7 +74,7 @@ public static class GroundspeakHelper
     public static CultureInfo CultureInfo => new("en-US");
 
     // all timestamps in the GPX are currently in Pacific Standard Time
-    public static TimeZoneInfo TimeZoneInfo => TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time"); // GetSystemTimeZones().First(tz => tz.Id == "Pacific Standard Time");
+    public static TimeZoneInfo TimeZoneInfo => TimeZoneInfo.FindSystemTimeZoneById("Pacific Standard Time");
 
     public static bool IsValidLogType(this string logType) => logType == "Found it" || logType == "Webcam Photo Taken" || logType == "Attended";
 }

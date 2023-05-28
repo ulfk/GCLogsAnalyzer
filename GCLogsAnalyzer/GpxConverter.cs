@@ -44,7 +44,6 @@ public class GpxConverter
         return this;
     }
 
-
     private GeocacheLog ReadLogAndGeocacheDetails(XmlReader reader)
     {
         var log = new GeocacheLog();
