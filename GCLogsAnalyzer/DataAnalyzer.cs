@@ -29,17 +29,17 @@ public static class DataAnalyzer
     private static TableColumn<GeocacheLog> CreateLogColumn(
         string headerText,
         Func<int, GeocacheLog, object> valueFunc)
-        => new TableColumn<GeocacheLog>(headerText, valueFunc);
+        => new(headerText, valueFunc);
 
     private static TableColumn<SimpleLogStat> CreateLogStatColumn(
         string headerText,
         Func<int, SimpleLogStat, object> valueFunc)
-        => new TableColumn<SimpleLogStat>(headerText, valueFunc);
+        => new(headerText, valueFunc);
 
     private static TableColumn<SimpleStat> CreateStatColumn(
         string headerText,
         Func<int, SimpleStat, object> valueFunc)
-        => new TableColumn<SimpleStat>(headerText, valueFunc);
+        => new(headerText, valueFunc);
 
     private static readonly TableColumn<GeocacheLog>[] FullInfoTableSpec =
     {

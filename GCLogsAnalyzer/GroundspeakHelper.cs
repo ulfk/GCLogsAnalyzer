@@ -40,22 +40,22 @@ public static class GroundspeakHelper
     /// <param name="prefixToRemove"></param>
     /// <returns></returns>
     // ReSharper disable once UnusedMember.Local
-    private static int GetIdFromCode(string code, string? prefixToRemove = null)
-    {
-        var factor = 1;
-        var result = 0;
-        var value = code;
-        if (!string.IsNullOrEmpty(prefixToRemove) && code.StartsWith(prefixToRemove))
-            value = code.Substring(prefixToRemove.Length);
+    //private static int GetIdFromCode(string code, string? prefixToRemove = null)
+    //{
+    //    var factor = 1;
+    //    var result = 0;
+    //    var value = code;
+    //    if (!string.IsNullOrEmpty(prefixToRemove) && code.StartsWith(prefixToRemove))
+    //        value = code[prefixToRemove.Length..];
         
-        for (var idx = value.Length - 1; idx >= 0; idx--)
-        {
-            result += LookupTable.IndexOf(value[idx]) * factor;
-            factor *= BaseValue;
-        }
+    //    for (var idx = value.Length - 1; idx >= 0; idx--)
+    //    {
+    //        result += LookupTable.IndexOf(value[idx]) * factor;
+    //        factor *= BaseValue;
+    //    }
 
-        return result - IdOffset;
-    }
+    //    return result - IdOffset;
+    //}
 
     public static string GetLogUrl(string logId)
     {
@@ -71,7 +71,7 @@ public static class GroundspeakHelper
     public static string GetUserUrl(this string user) => $"https://www.geocaching.com/p/default.aspx?id={user}";
 
     // used to convert float numbers that are currently stored in en-US style in the GPX
-    public static CultureInfo CultureInfo => new CultureInfo("en-US");
+    public static CultureInfo CultureInfo => new("en-US");
 
     // all timestamps in the GPX are currently in Pacific Standard Time
     public static TimeZoneInfo TimeZoneInfo => TimeZoneInfo.GetSystemTimeZones().First(tz => tz.Id == "Pacific Standard Time");
