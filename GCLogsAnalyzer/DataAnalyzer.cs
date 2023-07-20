@@ -151,10 +151,10 @@ public static class DataAnalyzer
 
         var stats = new List<SimpleLogStat>
         {
-            new SimpleLogStat("Farthest North", maxNorth!),
-            new SimpleLogStat("Farthest South", maxSouth!),
-            new SimpleLogStat("Farthest East", maxEast!),
-            new SimpleLogStat("Farthest West", maxWest!)
+            new SimpleLogStat("Furthest North", maxNorth!),
+            new SimpleLogStat("Furthest South", maxSouth!),
+            new SimpleLogStat("Furthest East", maxEast!),
+            new SimpleLogStat("Furthest West", maxWest!)
         };
 
         htmlGenerator.AddTableSection(stats, "Cardinal Direction Maximums", "CardinalDirectionMaximums", SimpleLogStatTableSpec);
