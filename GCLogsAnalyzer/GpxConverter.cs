@@ -129,6 +129,7 @@ public class GpxConverter
     {
         if (reader.IsEmptyElement) return;
 
+        log.FoundDate = DateTime.MinValue;
         while (reader.Read())
         {
             if (reader.Name == "groundspeak:logs")
@@ -136,9 +137,10 @@ public class GpxConverter
             if (reader.NodeType != XmlNodeType.Element || reader.Name != "groundspeak:log") 
                 continue;
 
+            var logId = "";
             if (reader.HasAttributes)
             {
-                log.LogId = GetAttributeAsString(reader, "id");
+                logId = GetAttributeAsString(reader, "id");
             }
 
             var foundDate = DateTime.MinValue;
@@ -158,8 +160,9 @@ public class GpxConverter
                 }
             }
 
-            if (logType.IsValidLogType())
+            if ((log.FoundDate == DateTime.MinValue || log.FoundDate > foundDate) && logType.IsValidLogType())
             {
+                log.LogId = logId;
                 log.FoundDate = foundDate;
                 log.FoundLog = foundLogMsg;
                 log.LogType = logType;
